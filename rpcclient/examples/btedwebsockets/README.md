@@ -13,7 +13,7 @@ demonstrate clean shutdown.
 The first step is to use `go get` to download and install the rpcclient package:
 
 ```bash
-$ go get github.com/btcsuite/bted/rpcclient
+$ go get github.com/bitweb-project/bted/rpcclient
 ```
 
 Next, modify the `main.go` source to specify the correct RPC username and
@@ -27,7 +27,7 @@ password for the RPC server:
 Finally, navigate to the example's directory and run it with:
 
 ```bash
-$ cd $GOPATH/src/github.com/btcsuite/bted/rpcclient/examples/btedwebsockets
+$ cd $GOPATH/src/github.com/bitweb-project/bted/rpcclient/examples/btedwebsockets
 $ go run *.go
 ```
 

@@ -1,9 +1,9 @@
 txscript
 ========
 
-[![Build Status](https://github.com/btcsuite/btcd/workflows/Build%20and%20Test/badge.svg)](https://github.com/btcsuite/btcd/actions)
+[![Build Status](https://github.com/bitweb-project/bted/workflows/Build%20and%20Test/badge.svg)](https://github.com/bitweb-project/bted/actions)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
-[![GoDoc](https://pkg.go.dev/github.com/btcsuite/btcd/txscript?status.png)](https://pkg.go.dev/github.com/btcsuite/btcd/txscript)
+[![GoDoc](https://pkg.go.dev/github.com/bitweb-project/bted/txscript?status.png)](https://pkg.go.dev/github.com/bitweb-project/bted/txscript)
 
 Package txscript implements the bitcoin transaction script language.  There is
 a comprehensive test suite.
@@ -26,15 +26,15 @@ $ go get -u github.com/bitweb-project/bted/txscript
 
 ## Examples
 
-* [Standard Pay-to-pubkey-hash Script](https://pkg.go.dev/github.com/btcsuite/btcd/txscript#example-PayToAddrScript)  
+* [Standard Pay-to-pubkey-hash Script](https://pkg.go.dev/github.com/bitweb-project/bted/txscript#example-PayToAddrScript)  
   Demonstrates creating a script which pays to a bitcoin address.  It also
   prints the created script hex and uses the DisasmString function to display
   the disassembled script.
 
-* [Extracting Details from Standard Scripts](https://pkg.go.dev/github.com/btcsuite/btcd/txscript#example-ExtractPkScriptAddrs)  
+* [Extracting Details from Standard Scripts](https://pkg.go.dev/github.com/bitweb-project/bted/txscript#example-ExtractPkScriptAddrs)  
   Demonstrates extracting information from a standard public key script.
 
-* [Manually Signing a Transaction Output](https://pkg.go.dev/github.com/btcsuite/btcd/txscript#example-SignTxOutput)  
+* [Manually Signing a Transaction Output](https://pkg.go.dev/github.com/bitweb-project/bted/txscript#example-SignTxOutput)  
   Demonstrates manually creating and signing a redeem transaction.
 
 * [Counting Opcodes in Scripts](http://godoc.org/github.com/decred/dcrd/txscript#example-ScriptTokenizer)  
@@ -44,7 +44,7 @@ $ go get -u github.com/bitweb-project/bted/txscript
 ## GPG Verification Key
 
 All official release tags are signed by Conformal so users can ensure the code
-has not been tampered with and is coming from the btcsuite developers.  To
+has not been tampered with and is coming from the bitweb-project developers.  To
 verify the signature perform the following:
 
 - Download the public key from the Conformal website at

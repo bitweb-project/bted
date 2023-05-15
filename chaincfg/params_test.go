@@ -9,6 +9,7 @@ import (
 	"encoding/hex"
 	"math/big"
 	"testing"
+//        "fmt"
 )
 
 // TestInvalidHashStr ensures the newShaHashFromStr function panics when used to
@@ -88,8 +89,10 @@ func TestInvalidHDKeyID(t *testing.T) {
 }
 
 func TestSigNetPowLimit(t *testing.T) {
+//	fmt.Printf("sigNetGenesisBlock.Header.Bits: %d\n", sigNetGenesisBlock.Header.Bits)
+//	fmt.Printf("compactToBig(sigNetGenesisBlock.Header.Bits): %s\n", compactToBig(sigNetGenesisBlock.Header.Bits).Text(16))
 	sigNetPowLimitHex, _ := hex.DecodeString(
-		"00000377ae000000000000000000000000000000000000000000000000000000",
+		"3fffff000000000000000000000000000000000000000000000000000000",
 	)
 	powLimit := new(big.Int).SetBytes(sigNetPowLimitHex)
 	if sigNetPowLimit.Cmp(powLimit) != 0 {

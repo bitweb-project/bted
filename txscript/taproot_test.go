@@ -38,11 +38,11 @@ var (
 		hdkeychain.HardenedKeyStart,
 	}
 	expectedExternalAddresses = []string{
-		"bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
-		"bc1p4qhjn9zdvkux4e44uhx8tc55attvtyu358kutcqkudyccelu0was9fqzwh",
+		"web1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxq8fal4a",
+		"web1p4qhjn9zdvkux4e44uhx8tc55attvtyu358kutcqkudyccelu0was5es7rf",
 	}
 	expectedInternalAddresses = []string{
-		"bc1p3qkhfews2uk44qtvauqyr2ttdsw7svhkl9nkm9s9c3x4ax5h60wqwruhk7",
+		"web1p3qkhfews2uk44qtvauqyr2ttdsw7svhkl9nkm9s9c3x4ax5h60wqlnvtmq",
 	}
 )
 
@@ -397,3 +397,4 @@ func TestTapscriptCommitmentVerification(t *testing.T) {
 		})
 	}
 }
+

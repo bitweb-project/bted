@@ -21,24 +21,24 @@ Command Line Examples:
 |--listen=|all interfaces on default port which is changed by `--testnet` and `--regtest` (**default**)|
 |--listen=0.0.0.0|all IPv4 interfaces on default port which is changed by `--testnet` and `--regtest`|
 |--listen=::|all IPv6 interfaces on default port which is changed by `--testnet` and `--regtest`|
-|--listen=:8333|all interfaces on port 8333|
-|--listen=0.0.0.0:8333|all IPv4 interfaces on port 8333|
-|--listen=[::]:8333|all IPv6 interfaces on port 8333|
-|--listen=127.0.0.1:8333|only IPv4 localhost on port 8333|
-|--listen=[::1]:8333|only IPv6 localhost on port 8333|
+|--listen=:1604|all interfaces on port 1604|
+|--listen=0.0.0.0:1604|all IPv4 interfaces on port 1604|
+|--listen=[::]:1604|all IPv6 interfaces on port 1604|
+|--listen=127.0.0.1:1604|only IPv4 localhost on port 1604|
+|--listen=[::1]:1604|only IPv6 localhost on port 1604|
 |--listen=:8336|all interfaces on non-standard port 8336|
 |--listen=0.0.0.0:8336|all IPv4 interfaces on non-standard port 8336|
 |--listen=[::]:8336|all IPv6 interfaces on non-standard port 8336|
-|--listen=127.0.0.1:8337 --listen=[::1]:8333|IPv4 localhost on port 8337 and IPv6 localhost on port 8333|
-|--listen=:8333 --listen=:8337|all interfaces on ports 8333 and 8337|
+|--listen=127.0.0.1:8337 --listen=[::1]:1604|IPv4 localhost on port 8337 and IPv6 localhost on port 1604|
+|--listen=:1604 --listen=:8337|all interfaces on ports 1604 and 8337|
 
 The following config file would configure btcd to only listen on localhost for both IPv4 and IPv6:
 
 ```text
 [Application Options]
 
-listen=127.0.0.1:8333
-listen=[::1]:8333
+listen=127.0.0.1:1604
+listen=[::1]:1604
 ```
 
 In addition, if you are starting btcd with TLS and want to make it
@@ -81,16 +81,16 @@ Command Line Examples:
 |--rpclisten=|all interfaces on default port which is changed by `--testnet`|
 |--rpclisten=0.0.0.0|all IPv4 interfaces on default port which is changed by `--testnet`|
 |--rpclisten=::|all IPv6 interfaces on default port which is changed by `--testnet`|
-|--rpclisten=:8334|all interfaces on port 8334|
-|--rpclisten=0.0.0.0:8334|all IPv4 interfaces on port 8334|
-|--rpclisten=[::]:8334|all IPv6 interfaces on port 8334|
-|--rpclisten=127.0.0.1:8334|only IPv4 localhost on port 8334|
-|--rpclisten=[::1]:8334|only IPv6 localhost on port 8334|
+|--rpclisten=:1605|all interfaces on port 1605|
+|--rpclisten=0.0.0.0:1605|all IPv4 interfaces on port 1605|
+|--rpclisten=[::]:1605|all IPv6 interfaces on port 1605|
+|--rpclisten=127.0.0.1:1605|only IPv4 localhost on port 1605|
+|--rpclisten=[::1]:1605|only IPv6 localhost on port 1605|
 |--rpclisten=:8336|all interfaces on non-standard port 8336|
 |--rpclisten=0.0.0.0:8336|all IPv4 interfaces on non-standard port 8336|
 |--rpclisten=[::]:8336|all IPv6 interfaces on non-standard port 8336|
-|--rpclisten=127.0.0.1:8337 --listen=[::1]:8334|IPv4 localhost on port 8337 and IPv6 localhost on port 8334|
-|--rpclisten=:8334 --listen=:8337|all interfaces on ports 8334 and 8337|
+|--rpclisten=127.0.0.1:8337 --listen=[::1]:1605|IPv4 localhost on port 8337 and IPv6 localhost on port 1605|
+|--rpclisten=:1605 --listen=:8337|all interfaces on ports 1605 and 8337|
 
 The following config file would configure the btcd RPC server to listen to all interfaces on the default port, including external interfaces, for both IPv4 and IPv6:
 
@@ -115,8 +115,8 @@ configurations.
 
 |Name|Port|
 |----|----|
-|Default Bitcoin peer-to-peer port|TCP 8333|
-|Default RPC port|TCP 8334|
+|Default Bitweb peer-to-peer port|TCP 1604|
+|Default RPC port|TCP 1605|
 
 ## Using bootstrap.dat
 

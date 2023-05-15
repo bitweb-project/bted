@@ -17,8 +17,8 @@ type MsgAddrV2 struct {
 	AddrList []*NetAddressV2
 }
 
-// BtcDecode decodes r using the bitcoin protocol into a MsgAddrV2.
-func (m *MsgAddrV2) BtcDecode(r io.Reader, pver uint32,
+// BteDecode decodes r using the bitcoin protocol into a MsgAddrV2.
+func (m *MsgAddrV2) BteDecode(r io.Reader, pver uint32,
 	enc MessageEncoding) error {
 
 	count, err := ReadVarInt(r, pver)
@@ -30,7 +30,7 @@ func (m *MsgAddrV2) BtcDecode(r io.Reader, pver uint32,
 	if count > MaxV2AddrPerMsg {
 		str := fmt.Sprintf("too many addresses for message [count %v,"+
 			" max %v]", count, MaxV2AddrPerMsg)
-		return messageError("MsgAddrV2.BtcDecode", str)
+		return messageError("MsgAddrV2.BteDecode", str)
 	}
 
 	addrList := make([]NetAddressV2, count)

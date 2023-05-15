@@ -34,7 +34,7 @@ var (
 	// testNet3PowLimit is the highest proof of work value a Bitcoin block
 	// can have for the test network (version 3).  It is the value
 	// 2^226 - 1.
-	testNet3PowLimit = new(big.Int).Sub(new(big.Int).Lsh(bigOne, 256), bigOne)
+	testNet3PowLimit, _ = new(big.Int).SetString("0x3fffff000000000000000000000000000000000000000000000000000000", 0)
 
 	// simNetPowLimit is the highest proof of work value a Bitcoin block
 	// can have for the simulation test network.  It is the value 2^255 - 1.
@@ -42,7 +42,8 @@ var (
 
 	// sigNetPowLimit is the highest proof of work value a bitcoin block can
 	// have for the signet test network. It is the value 2^256 - 1.
-	sigNetPowLimit = new(big.Int).Sub(new(big.Int).Lsh(bigOne, 256), bigOne)
+
+	sigNetPowLimit, _ = new(big.Int).SetString("0x3fffff000000000000000000000000000000000000000000000000000000", 0)
 
 	// DefaultSignetChallenge is the byte representation of the signet
 	// challenge for the default (public, Taproot enabled) signet network.

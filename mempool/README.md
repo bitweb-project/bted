@@ -1,9 +1,9 @@
 mempool
 =======
 
-[![Build Status](https://github.com/btcsuite/btcd/workflows/Build%20and%20Test/badge.svg)](https://github.com/btcsuite/btcd/actions)
+[![Build Status](https://github.com/bitweb-project/bted/workflows/Build%20and%20Test/badge.svg)](https://github.com/bitweb-project/bted/actions)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
-[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/btcsuite/btcd/mempool)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/bitweb-project/bted/mempool)
 
 Package mempool provides a policy-enforced pool of unmined bitcoin transactions.
 

@@ -11,9 +11,9 @@ import (
 // This message has no payload.
 type MsgSendAddrV2 struct{}
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// BteDecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgSendAddrV2) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgSendAddrV2) BteDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	return nil
 }
 

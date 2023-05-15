@@ -331,9 +331,9 @@ type MsgAlert struct {
 	Payload *Alert
 }
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// BteDecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgAlert) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgAlert) BteDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	var err error
 
 	msg.SerializedPayload, err = ReadVarBytes(r, pver, MaxMessagePayload,

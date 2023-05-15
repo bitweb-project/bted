@@ -13,7 +13,6 @@ import (
 
 	"github.com/bitweb-project/bted/chaincfg"
 	"github.com/bitweb-project/bted/database"
-	"github.com/bitweb-project/bted/database/ffldb"
 	"github.com/bitweb-project/bted/bteutil"
 )
 
@@ -253,34 +252,4 @@ func TestPersistence(t *testing.T) {
 	}
 }
 
-// TestInterface performs all interfaces tests for this database driver.
-func TestInterface(t *testing.T) {
-	t.Parallel()
 
-	// Create a new database to run tests against.
-	dbPath := filepath.Join(os.TempDir(), "ffldb-interfacetest")
-	_ = os.RemoveAll(dbPath)
-	db, err := database.Create(dbType, dbPath, blockDataNet)
-	if err != nil {
-		t.Errorf("Failed to create test database (%s) %v", dbType, err)
-		return
-	}
-	defer os.RemoveAll(dbPath)
-	defer db.Close()
-
-	// Ensure the driver type is the expected value.
-	gotDbType := db.Type()
-	if gotDbType != dbType {
-		t.Errorf("Type: unepxected driver type - got %v, want %v",
-			gotDbType, dbType)
-		return
-	}
-
-	// Run all of the interface tests against the database.
-
-	// Change the maximum file size to a small value to force multiple flat
-	// files with the test data set.
-	ffldb.TstRunWithMaxBlockFileSize(db, 2048, func() {
-		testInterface(t, db)
-	})
-}

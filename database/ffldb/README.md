@@ -1,15 +1,15 @@
 ffldb
 =====
 
-[![Build Status](https://github.com/btcsuite/btcd/workflows/Build%20and%20Test/badge.svg)](https://github.com/btcsuite/btcd/actions)
+[![Build Status](https://github.com/bitweb-project/bted/workflows/Build%20and%20Test/badge.svg)](https://github.com/bitweb-project/bted/actions)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
-[![GoDoc](https://pkg.go.dev/github.com/btcsuite/btcd/database/ffldb?status.png)](https://pkg.go.dev/github.com/btcsuite/btcd/database/ffldb)
+[![GoDoc](https://pkg.go.dev/github.com/bitweb-project/bted/database/ffldb?status.png)](https://pkg.go.dev/github.com/bitweb-project/bted/database/ffldb)
 =======
 
 Package ffldb implements a driver for the database package that uses leveldb for
 the backing metadata and flat files for block storage.
 
-This driver is the recommended driver for use with btcd.  It makes use leveldb
+This driver is the recommended driver for use with bted.  It makes use leveldb
 for the metadata, flat files for block storage, and checksums in key areas to
 ensure data integrity.
 

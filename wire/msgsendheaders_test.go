@@ -55,7 +55,7 @@ func TestSendHeaders(t *testing.T) {
 
 	// Test decode with latest protocol version.
 	readmsg := NewMsgSendHeaders()
-	err = readmsg.BtcDecode(&buf, pver, enc)
+	err = readmsg.BteDecode(&buf, pver, enc)
 	if err != nil {
 		t.Errorf("decode of MsgSendHeaders failed [%v] err <%v>", buf,
 			err)
@@ -63,7 +63,7 @@ func TestSendHeaders(t *testing.T) {
 
 	// Older protocol versions should fail decode since message didn't
 	// exist yet.
-	err = readmsg.BtcDecode(&buf, oldPver, enc)
+	err = readmsg.BteDecode(&buf, oldPver, enc)
 	if err == nil {
 		s := "decode of MsgSendHeaders passed for old protocol " +
 			"version %v err <%v>"
@@ -90,7 +90,7 @@ func TestSendHeadersBIP0130(t *testing.T) {
 
 	// Test decode with old protocol version.
 	readmsg := NewMsgSendHeaders()
-	err = readmsg.BtcDecode(&buf, pver, enc)
+	err = readmsg.BteDecode(&buf, pver, enc)
 	if err == nil {
 		t.Errorf("decode of MsgSendHeaders succeeded when it should " +
 			"have failed")
@@ -113,7 +113,7 @@ func TestSendHeadersCrossProtocol(t *testing.T) {
 
 	// Decode with old protocol version.
 	readmsg := NewMsgSendHeaders()
-	err = readmsg.BtcDecode(&buf, SendHeadersVersion, enc)
+	err = readmsg.BteDecode(&buf, SendHeadersVersion, enc)
 	if err != nil {
 		t.Errorf("decode of MsgSendHeaders failed [%v] err <%v>", buf,
 			err)
@@ -179,13 +179,13 @@ func TestSendHeadersWire(t *testing.T) {
 		// Decode the message from wire format.
 		var msg MsgSendHeaders
 		rbuf := bytes.NewReader(test.buf)
-		err = msg.BtcDecode(rbuf, test.pver, test.enc)
+		err = msg.BteDecode(rbuf, test.pver, test.enc)
 		if err != nil {
-			t.Errorf("BtcDecode #%d error %v", i, err)
+			t.Errorf("BteDecode #%d error %v", i, err)
 			continue
 		}
 		if !reflect.DeepEqual(&msg, test.out) {
-			t.Errorf("BtcDecode #%d\n got: %s want: %s", i,
+			t.Errorf("BteDecode #%d\n got: %s want: %s", i,
 				spew.Sdump(msg), spew.Sdump(test.out))
 			continue
 		}

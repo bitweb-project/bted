@@ -94,7 +94,7 @@ func TestRejectLatest(t *testing.T) {
 
 	// Test decode with latest protocol version.
 	readMsg := MsgReject{}
-	err = readMsg.BtcDecode(&buf, pver, enc)
+	err = readMsg.BteDecode(&buf, pver, enc)
 	if err != nil {
 		t.Errorf("decode of MsgReject failed %v err <%v>", buf.Bytes(),
 			err)
@@ -152,7 +152,7 @@ func TestRejectBeforeAdded(t *testing.T) {
 
 	//	// Test decode with old protocol version.
 	readMsg := MsgReject{}
-	err = readMsg.BtcDecode(&buf, pver, enc)
+	err = readMsg.BteDecode(&buf, pver, enc)
 	if err == nil {
 		t.Errorf("decode of MsgReject succeeded when it shouldn't "+
 			"have %v", spew.Sdump(buf.Bytes()))
@@ -200,7 +200,7 @@ func TestRejectCrossProtocol(t *testing.T) {
 
 	// Decode with old protocol version.
 	readMsg := MsgReject{}
-	err = readMsg.BtcDecode(&buf, RejectVersion-1, BaseEncoding)
+	err = readMsg.BteDecode(&buf, RejectVersion-1, BaseEncoding)
 	if err == nil {
 		t.Errorf("encode of MsgReject succeeded when it shouldn't "+
 			"have %v", msg)
@@ -262,10 +262,10 @@ func TestRejectWire(t *testing.T) {
 				0x12, // RejectDuplicate
 				0x0f, 0x64, 0x75, 0x70, 0x6c, 0x69, 0x63, 0x61,
 				0x74, 0x65, 0x20, 0x62, 0x6c, 0x6f, 0x63, 0x6b, // "duplicate block"
-				0x6f, 0xe2, 0x8c, 0x0a, 0xb6, 0xf1, 0xb3, 0x72,
-				0xc1, 0xa6, 0xa2, 0x46, 0xae, 0x63, 0xf7, 0x4f,
-				0x93, 0x1e, 0x83, 0x65, 0xe1, 0x5a, 0x08, 0x9c,
-				0x68, 0xd6, 0x19, 0x00, 0x00, 0x00, 0x00, 0x00, // mainNetGenesisHash
+				0xf3, 0xf1, 0x62, 0xbe, 0x69, 0xa8, 0xf2, 0x2b,
+				0x5a, 0x48, 0x4e, 0xf8, 0xd7, 0x5d, 0x43, 0xda,
+				0xb9, 0xa7, 0x83, 0x7a, 0x76, 0xc3, 0x66, 0xd2,
+				0x9b, 0x4d, 0xc5, 0x6b, 0x9c, 0x3e, 0x04, 0x00, // mainNetGenesisHash
 			},
 			ProtocolVersion,
 			BaseEncoding,
@@ -290,13 +290,13 @@ func TestRejectWire(t *testing.T) {
 		// Decode the message from wire format.
 		var msg MsgReject
 		rbuf := bytes.NewReader(test.buf)
-		err = msg.BtcDecode(rbuf, test.pver, test.enc)
+		err = msg.BteDecode(rbuf, test.pver, test.enc)
 		if err != nil {
-			t.Errorf("BtcDecode #%d error %v", i, err)
+			t.Errorf("BteDecode #%d error %v", i, err)
 			continue
 		}
 		if !reflect.DeepEqual(msg, test.msg) {
-			t.Errorf("BtcDecode #%d\n got: %s want: %s", i,
+			t.Errorf("BteDecode #%d\n got: %s want: %s", i,
 				spew.Sdump(msg), spew.Sdump(test.msg))
 			continue
 		}
@@ -317,10 +317,10 @@ func TestRejectWireErrors(t *testing.T) {
 		0x12, // RejectDuplicate
 		0x0f, 0x64, 0x75, 0x70, 0x6c, 0x69, 0x63, 0x61,
 		0x74, 0x65, 0x20, 0x62, 0x6c, 0x6f, 0x63, 0x6b, // "duplicate block"
-		0x6f, 0xe2, 0x8c, 0x0a, 0xb6, 0xf1, 0xb3, 0x72,
-		0xc1, 0xa6, 0xa2, 0x46, 0xae, 0x63, 0xf7, 0x4f,
-		0x93, 0x1e, 0x83, 0x65, 0xe1, 0x5a, 0x08, 0x9c,
-		0x68, 0xd6, 0x19, 0x00, 0x00, 0x00, 0x00, 0x00, // mainNetGenesisHash
+		0xf3, 0xf1, 0x62, 0xbe, 0x69, 0xa8, 0xf2, 0x2b,
+		0x5a, 0x48, 0x4e, 0xf8, 0xd7, 0x5d, 0x43, 0xda,
+		0xb9, 0xa7, 0x83, 0x7a, 0x76, 0xc3, 0x66, 0xd2,
+		0x9b, 0x4d, 0xc5, 0x6b, 0x9c, 0x3e, 0x04, 0x00, // mainNetGenesisHash
 	}
 
 	tests := []struct {
@@ -369,9 +369,9 @@ func TestRejectWireErrors(t *testing.T) {
 		// Decode from wire format.
 		var msg MsgReject
 		r := newFixedReader(test.max, test.buf)
-		err = msg.BtcDecode(r, test.pver, test.enc)
+		err = msg.BteDecode(r, test.pver, test.enc)
 		if reflect.TypeOf(err) != reflect.TypeOf(test.readErr) {
-			t.Errorf("BtcDecode #%d wrong error got: %v, want: %v",
+			t.Errorf("BteDecode #%d wrong error got: %v, want: %v",
 				i, err, test.readErr)
 			continue
 		}
@@ -380,10 +380,11 @@ func TestRejectWireErrors(t *testing.T) {
 		// equality.
 		if _, ok := err.(*MessageError); !ok {
 			if err != test.readErr {
-				t.Errorf("BtcDecode #%d wrong error got: %v, "+
+				t.Errorf("BteDecode #%d wrong error got: %v, "+
 					"want: %v", i, err, test.readErr)
 				continue
 			}
 		}
 	}
 }
+

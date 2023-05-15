@@ -1,9 +1,9 @@
 bech32
 ==========
 
-[![Build Status](http://img.shields.io/travis/btcsuite/bteutil.svg)](https://travis-ci.org/btcsuite/bteutil)
+[![Build Status](http://img.shields.io/travis/bitweb-project/bteutil.svg)](https://travis-ci.org/bitweb-project/bteutil)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
-[![GoDoc](https://godoc.org/github.com/btcsuite/bted/bteutil/bech32?status.png)](http://godoc.org/github.com/btcsuite/bted/bteutil/bech32)
+[![GoDoc](https://godoc.org/github.com/bitweb-project/bted/bteutil/bech32?status.png)](http://godoc.org/github.com/bitweb-project/bted/bteutil/bech32)
 
 Package bech32 provides a Go implementation of the bech32 format specified in
 [BIP 173](https://github.com/bitcoin/bips/blob/master/bip-0173.mediawiki).
@@ -18,9 +18,9 @@ $ go get -u github.com/bitweb-project/bted/bteutil/bech32
 
 ## Examples
 
-* [Bech32 decode Example](http://godoc.org/github.com/btcsuite/bted/bteutil/bech32#example-Bech32Decode)
+* [Bech32 decode Example](http://godoc.org/github.com/bitweb-project/bted/bteutil/bech32#example-Bech32Decode)
   Demonstrates how to decode a bech32 encoded string.
-* [Bech32 encode Example](http://godoc.org/github.com/btcsuite/bted/bteutil/bech32#example-BechEncode)
+* [Bech32 encode Example](http://godoc.org/github.com/bitweb-project/bted/bteutil/bech32#example-BechEncode)
   Demonstrates how to encode data into a bech32 string.
 
 ## License

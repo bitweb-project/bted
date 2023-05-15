@@ -45,9 +45,9 @@ func (msg *MsgCFHeaders) AddCFHash(hash *chainhash.Hash) error {
 	return nil
 }
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// BteDecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgCFHeaders) BtcDecode(r io.Reader, pver uint32, _ MessageEncoding) error {
+func (msg *MsgCFHeaders) BteDecode(r io.Reader, pver uint32, _ MessageEncoding) error {
 	// Read filter type
 	err := readElement(r, &msg.FilterType)
 	if err != nil {
@@ -77,7 +77,7 @@ func (msg *MsgCFHeaders) BtcDecode(r io.Reader, pver uint32, _ MessageEncoding) 
 		str := fmt.Sprintf("too many committed filter headers for "+
 			"message [count %v, max %v]", count,
 			MaxBlockHeadersPerMsg)
-		return messageError("MsgCFHeaders.BtcDecode", str)
+		return messageError("MsgCFHeaders.BteDecode", str)
 	}
 
 	// Create a contiguous slice of hashes to deserialize into in order to
@@ -142,7 +142,7 @@ func (msg *MsgCFHeaders) BtcEncode(w io.Writer, pver uint32, _ MessageEncoding) 
 
 // Deserialize decodes a filter header from r into the receiver using a format
 // that is suitable for long-term storage such as a database. This function
-// differs from BtcDecode in that BtcDecode decodes from the bitcoin wire
+// differs from BteDecode in that BteDecode decodes from the bitcoin wire
 // protocol as it was sent across the network.  The wire encoding can
 // technically differ depending on the protocol version and doesn't even really
 // need to match the format of a stored filter header at all. As of the time
@@ -152,8 +152,8 @@ func (msg *MsgCFHeaders) BtcEncode(w io.Writer, pver uint32, _ MessageEncoding) 
 func (msg *MsgCFHeaders) Deserialize(r io.Reader) error {
 	// At the current time, there is no difference between the wire encoding
 	// and the stable long-term storage format.  As a result, make use of
-	// BtcDecode.
-	return msg.BtcDecode(r, 0, BaseEncoding)
+	// BteDecode.
+	return msg.BteDecode(r, 0, BaseEncoding)
 }
 
 // Command returns the protocol command string for the message.  This is part

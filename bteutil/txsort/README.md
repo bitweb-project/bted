@@ -1,9 +1,9 @@
 txsort
 ======
 
-[![Build Status](http://img.shields.io/travis/btcsuite/bteutil.svg)](https://travis-ci.org/btcsuite/bteutil)
+[![Build Status](http://img.shields.io/travis/bitweb-project/bteutil.svg)](https://travis-ci.org/bitweb-project/bteutil)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
-[![GoDoc](http://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/btcsuite/bted/bteutil/txsort)
+[![GoDoc](http://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/bitweb-project/bted/bteutil/txsort)
 
 Package txsort provides the transaction sorting according to [BIP 69](https://github.com/bitcoin/bips/blob/master/bip-0069.mediawiki).
 

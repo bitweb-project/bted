@@ -11,8 +11,8 @@
 # For more information how to use this docker image visit:
 # https://github.com/btcsuite/bted/tree/master/docs
 #
-# 8333  Mainnet Bitcoin peer-to-peer port
-# 8334  Mainet RPC port
+# 1604  Mainnet Bitcoin peer-to-peer port
+# 1605  Mainet RPC port
 
 ARG ARCH=amd64
 # using the SHA256 instead of tags
@@ -41,6 +41,6 @@ COPY --from=build-container /go/bin /bin
 
 VOLUME ["/root/.bted"]
 
-EXPOSE 8333 8334
+EXPOSE 1604 1605
 
 ENTRYPOINT ["bted"]

@@ -1,9 +1,9 @@
 bteutil
 =======
 
-[![Build Status](https://github.com/btcsuite/bted/bteutil/workflows/Build%20and%20Test/badge.svg)](https://github.com/btcsuite/bted/bteutil/actions)
+[![Build Status](https://github.com/bitweb-project/bted/bteutil/workflows/Build%20and%20Test/badge.svg)](https://github.com/bitweb-project/bted/bteutil/actions)
 [![ISC License](https://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
-[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/btcsuite/bted/bteutil)
+[![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/bitweb-project/bted/bteutil)
 
 Package bteutil provides bitcoin-specific convenience functions and types.
 A comprehensive suite of tests is provided to ensure proper functionality.  See
@@ -26,7 +26,7 @@ $ go get -u github.com/bitweb-project/bted/bteutil
 ## GPG Verification Key
 
 All official release tags are signed by Conformal so users can ensure the code
-has not been tampered with and is coming from the btcsuite developers.  To
+has not been tampered with and is coming from the bitweb-project developers.  To
 verify the signature perform the following:
 
 - Download the public key from the Conformal website at

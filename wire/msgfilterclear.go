@@ -16,13 +16,13 @@ import (
 // no payload.
 type MsgFilterClear struct{}
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// BteDecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
-func (msg *MsgFilterClear) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (msg *MsgFilterClear) BteDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	if pver < BIP0037Version {
 		str := fmt.Sprintf("filterclear message invalid for protocol "+
 			"version %d", pver)
-		return messageError("MsgFilterClear.BtcDecode", str)
+		return messageError("MsgFilterClear.BteDecode", str)
 	}
 
 	return nil

@@ -68,7 +68,7 @@ var (
 	// defaultNodePort is the start of the range for listening ports of
 	// harness nodes. Ports are monotonically increasing starting from this
 	// number and are determined by the results of nextAvailablePort().
-	defaultNodePort uint32 = 8333
+	defaultNodePort uint32 = 1604
 
 	// ListenerFormat is the format string that is used to generate local
 	// listener addresses.

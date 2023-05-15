@@ -18,7 +18,7 @@ RUN GOOS=$TARGETOS GOARCH=$TARGETARCH go install -v . ./cmd/...
 ###########################
 FROM alpine:3.15
 COPY --from=build /go/bin /bin
-# 8333  Mainnet Bitcoin peer-to-peer port
-# 8334  Mainet RPC port
-EXPOSE 8333 8334
+# 1604  Mainnet Bitweb peer-to-peer port
+# 1605  Mainet RPC port
+EXPOSE 1604 1605
 ENTRYPOINT ["bted"]

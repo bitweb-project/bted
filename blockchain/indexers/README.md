@@ -1,9 +1,9 @@
 indexers
 ========
 
-[![Build Status](https://github.com/btcsuite/btcd/workflows/Build%20and%20Test/badge.svg)](https://github.com/btcsuite/btcd/actions)
+[![Build Status](https://github.com/bitweb-project/bted/workflows/Build%20and%20Test/badge.svg)](https://github.com/bitweb-project/bted/actions)
 [![ISC License](http://img.shields.io/badge/license-ISC-blue.svg)](http://copyfree.org)
-[![GoDoc](https://pkg.go.dev/github.com/btcsuite/btcd/blockchain/indexers?status.png)](https://pkg.go.dev/github.com/btcsuite/btcd/blockchain/indexers)
+[![GoDoc](https://pkg.go.dev/github.com/bitweb-project/bted/blockchain/indexers?status.png)](https://pkg.go.dev/github.com/bitweb-project/bted/blockchain/indexers)
 
 Package indexers implements optional block chain indexes.
 

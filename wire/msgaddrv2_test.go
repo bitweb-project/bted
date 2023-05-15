@@ -48,7 +48,7 @@ func TestAddrV2Decode(t *testing.T) {
 		r := bytes.NewReader(test.buf)
 		m := &MsgAddrV2{}
 
-		err := m.BtcDecode(r, 0, LatestEncoding)
+		err := m.BteDecode(r, 0, LatestEncoding)
 		if test.expectedError {
 			if err == nil {
 				t.Errorf("Test #%d expected error", i)

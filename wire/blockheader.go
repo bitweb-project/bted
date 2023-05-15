@@ -9,7 +9,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/bitweb-project/bitweb_yespower_go"
+	"github.com/bitweb-project/yespower_go"
 
 	"github.com/bitweb-project/bted/chaincfg/chainhash"
 )
@@ -56,17 +56,17 @@ func (h *BlockHeader) BlockHash() chainhash.Hash {
 	buf := bytes.NewBuffer(make([]byte, 0, MaxBlockHeaderPayload))
 	_ = writeBlockHeader(buf, 0, h)
        
-	hashedYespower := bitweb_yespower_go.YespowerHash(buf.Bytes())
+	hashedYespower := yespower.YespowerHash(buf.Bytes())
 	copy(blockhash[:], hashedYespower)
 
 	return blockhash
 }
 
-// BtcDecode decodes r using the bitcoin protocol encoding into the receiver.
+// BteDecode decodes r using the bitcoin protocol encoding into the receiver.
 // This is part of the Message interface implementation.
 // See Deserialize for decoding block headers stored to disk, such as in a
 // database, as opposed to decoding block headers from the wire.
-func (h *BlockHeader) BtcDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
+func (h *BlockHeader) BteDecode(r io.Reader, pver uint32, enc MessageEncoding) error {
 	return readBlockHeader(r, pver, h)
 }
 

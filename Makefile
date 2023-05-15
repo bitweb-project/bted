@@ -84,17 +84,6 @@ unit:
 	cd bteutil; $(GOTEST_DEV) ./... -test.timeout=20m
 	cd bteutil/psbt; $(GOTEST_DEV) ./... -test.timeout=20m
 
-unit-cover: $(GOACC_BIN)
-	@$(call print, "Running unit coverage tests.")
-	$(GOACC_BIN) ./...
-	
-	# We need to remove the /v2 pathing from the module to have it work
-	# nicely with the CI tool we use to render live code coverage.
-	cd btcec; $(GOACC_BIN) ./...; sed -i.bak 's/v2\///g' coverage.txt
-
-	cd bteutil; $(GOACC_BIN) ./...
-
-	cd bteutil/psbt; $(GOACC_BIN) ./...
 
 unit-race:
 	@$(call print, "Running unit race tests.")
@@ -117,16 +106,11 @@ lint: $(LINT_BIN)
 	@$(call print, "Linting source.")
 	$(LINT)
 
-clean:
-	@$(call print, "Cleaning source.$(NC)")
-	$(RM) coverage.txt btcec/coverage.txt bteutil/coverage.txt bteutil/psbt/coverage.txt
-
 .PHONY: all \
 	default \
 	build \
 	check \
 	unit \
-	unit-cover \
 	unit-race \
 	fmt \
 	lint \

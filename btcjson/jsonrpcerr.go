@@ -154,7 +154,7 @@ const (
 	// which does not exist. It can also indicate an attempt to unload a
 	// wallet that was not previously loaded.
 	//
-	// Not to be confused with ErrRPCNoWallet, which is specific to btcd.
+	// Not to be confused with ErrRPCNoWallet, which is specific to bted.
 	ErrRPCWalletNotFound RPCErrorCode = -18
 
 	// ErrRPCWalletNotSpecified indicates that no wallet was specified, for
@@ -182,7 +182,7 @@ const (
 	ErrRPCTxAlreadyInChain  RPCErrorCode = -27
 )
 
-// Errors that are specific to btcd.
+// Errors that are specific to bted.
 const (
 	ErrRPCNoWallet      RPCErrorCode = -1
 	ErrRPCUnimplemented RPCErrorCode = -1

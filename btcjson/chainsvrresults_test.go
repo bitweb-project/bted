@@ -10,9 +10,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/btcsuite/btcd/btcjson"
-	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/btcjson"
+	"github.com/bitweb-project/bted/bteutil"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
 	"github.com/davecgh/go-spew/spew"
 )
 
@@ -142,8 +142,8 @@ func TestGetTxOutSetInfoResult(t *testing.T) {
 					return *h
 				}(),
 				DiskSize: 1,
-				TotalAmount: func() btcutil.Amount {
-					a, err := btcutil.NewAmount(0.2)
+				TotalAmount: func() bteutil.Amount {
+					a, err := bteutil.NewAmount(0.2)
 					if err != nil {
 						panic(err)
 					}

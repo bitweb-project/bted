@@ -8,15 +8,15 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/blockchain/indexers"
-	"github.com/btcsuite/btcd/database"
-	"github.com/btcsuite/btcd/limits"
+	"github.com/bitweb-project/bted/blockchain"
+	"github.com/bitweb-project/bted/blockchain/indexers"
+	"github.com/bitweb-project/bted/database"
+	"github.com/bitweb-project/bted/limits"
 	"github.com/btcsuite/btclog"
 )
 
 const (
-	// blockDbNamePrefix is the prefix for the btcd block database.
+	// blockDbNamePrefix is the prefix for the bted block database.
 	blockDbNamePrefix = "blocks"
 )
 

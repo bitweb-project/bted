@@ -16,11 +16,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/rpcclient"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitweb-project/bted/bteutil"
+	"github.com/bitweb-project/bted/chaincfg"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/rpcclient"
+	"github.com/bitweb-project/bted/wire"
 )
 
 const (
@@ -83,10 +83,10 @@ var (
 // Harness to exercise functionality.
 type HarnessTestCase func(r *Harness, t *testing.T)
 
-// Harness fully encapsulates an active btcd process to provide a unified
-// platform for creating rpc driven integration tests involving btcd. The
-// active btcd node will typically be run in simnet mode in order to allow for
-// easy generation of test blockchains.  The active btcd process is fully
+// Harness fully encapsulates an active bted process to provide a unified
+// platform for creating rpc driven integration tests involving bted. The
+// active bted node will typically be run in simnet mode in order to allow for
+// easy generation of test blockchains.  The active bted process is fully
 // managed by Harness, which handles the necessary initialization, and teardown
 // of the process along with any temporary directories created as a result.
 // Multiple Harness instances may be run concurrently, in order to allow for
@@ -121,7 +121,7 @@ type Harness struct {
 // New creates and initializes new instance of the rpc test harness.
 // Optionally, websocket handlers and a specified configuration may be passed.
 // In the case that a nil config is passed, a default configuration will be
-// used. If a custom btcd executable is specified, it will be used to start the
+// used. If a custom bted executable is specified, it will be used to start the
 // harness node. Otherwise a new binary is built on demand.
 //
 // NOTE: This function is safe for concurrent access.
@@ -201,7 +201,7 @@ func New(activeNet *chaincfg.Params, handlers *rpcclient.NotificationHandlers,
 	// callback.
 	if handlers.OnFilteredBlockConnected != nil {
 		obc := handlers.OnFilteredBlockConnected
-		handlers.OnFilteredBlockConnected = func(height int32, header *wire.BlockHeader, filteredTxns []*btcutil.Tx) {
+		handlers.OnFilteredBlockConnected = func(height int32, header *wire.BlockHeader, filteredTxns []*bteutil.Tx) {
 			wallet.IngestBlock(height, header, filteredTxns)
 			obc(height, header, filteredTxns)
 		}
@@ -245,7 +245,7 @@ func New(activeNet *chaincfg.Params, handlers *rpcclient.NotificationHandlers,
 // NOTE: This method and TearDown should always be called from the same
 // goroutine as they are not concurrent safe.
 func (h *Harness) SetUp(createTestChain bool, numMatureOutputs uint32) error {
-	// Start the btcd node itself. This spawns a new process which will be
+	// Start the bted node itself. This spawns a new process which will be
 	// managed
 	if err := h.node.start(); err != nil {
 		return err
@@ -258,12 +258,12 @@ func (h *Harness) SetUp(createTestChain bool, numMatureOutputs uint32) error {
 
 	// Filter transactions that pay to the coinbase associated with the
 	// wallet.
-	filterAddrs := []btcutil.Address{h.wallet.coinbaseAddr}
+	filterAddrs := []bteutil.Address{h.wallet.coinbaseAddr}
 	if err := h.Client.LoadTxFilter(true, filterAddrs, nil); err != nil {
 		return err
 	}
 
-	// Ensure btcd properly dispatches our registered call-back for each new
+	// Ensure bted properly dispatches our registered call-back for each new
 	// block. Otherwise, the memWallet won't function properly.
 	if err := h.Client.NotifyBlocks(); err != nil {
 		return err
@@ -336,7 +336,7 @@ func (h *Harness) TearDown() error {
 	return h.tearDown()
 }
 
-// connectRPCClient attempts to establish an RPC connection to the created btcd
+// connectRPCClient attempts to establish an RPC connection to the created bted
 // process belonging to this Harness instance. If the initial connection
 // attempt fails, this function will retry h.maxConnRetries times, backing off
 // the time between subsequent attempts. If after h.maxConnRetries attempts,
@@ -382,7 +382,7 @@ func (h *Harness) connectRPCClient() error {
 // wallet.
 //
 // This function is safe for concurrent access.
-func (h *Harness) NewAddress() (btcutil.Address, error) {
+func (h *Harness) NewAddress() (bteutil.Address, error) {
 	return h.wallet.NewAddress()
 }
 
@@ -390,7 +390,7 @@ func (h *Harness) NewAddress() (btcutil.Address, error) {
 // wallet.
 //
 // This function is safe for concurrent access.
-func (h *Harness) ConfirmedBalance() btcutil.Amount {
+func (h *Harness) ConfirmedBalance() bteutil.Amount {
 	return h.wallet.ConfirmedBalance()
 }
 
@@ -400,7 +400,7 @@ func (h *Harness) ConfirmedBalance() btcutil.Amount {
 //
 // This function is safe for concurrent access.
 func (h *Harness) SendOutputs(targetOutputs []*wire.TxOut,
-	feeRate btcutil.Amount) (*chainhash.Hash, error) {
+	feeRate bteutil.Amount) (*chainhash.Hash, error) {
 
 	return h.wallet.SendOutputs(targetOutputs, feeRate)
 }
@@ -411,7 +411,7 @@ func (h *Harness) SendOutputs(targetOutputs []*wire.TxOut,
 //
 // This function is safe for concurrent access.
 func (h *Harness) SendOutputsWithoutChange(targetOutputs []*wire.TxOut,
-	feeRate btcutil.Amount) (*chainhash.Hash, error) {
+	feeRate bteutil.Amount) (*chainhash.Hash, error) {
 
 	return h.wallet.SendOutputsWithoutChange(targetOutputs, feeRate)
 }
@@ -428,7 +428,7 @@ func (h *Harness) SendOutputsWithoutChange(targetOutputs []*wire.TxOut,
 //
 // This function is safe for concurrent access.
 func (h *Harness) CreateTransaction(targetOutputs []*wire.TxOut,
-	feeRate btcutil.Amount, change bool) (*wire.MsgTx, error) {
+	feeRate bteutil.Amount, change bool) (*wire.MsgTx, error) {
 
 	return h.wallet.CreateTransaction(targetOutputs, feeRate, change)
 }
@@ -465,8 +465,8 @@ func (h *Harness) P2PAddress() string {
 // blockTime parameter if one doesn't wish to set a custom time.
 //
 // This function is safe for concurrent access.
-func (h *Harness) GenerateAndSubmitBlock(txns []*btcutil.Tx, blockVersion int32,
-	blockTime time.Time) (*btcutil.Block, error) {
+func (h *Harness) GenerateAndSubmitBlock(txns []*bteutil.Tx, blockVersion int32,
+	blockTime time.Time) (*bteutil.Block, error) {
 	return h.GenerateAndSubmitBlockWithCustomCoinbaseOutputs(txns,
 		blockVersion, blockTime, []wire.TxOut{})
 }
@@ -486,8 +486,8 @@ func (h *Harness) GenerateAndSubmitBlock(txns []*btcutil.Tx, blockVersion int32,
 //
 // This function is safe for concurrent access.
 func (h *Harness) GenerateAndSubmitBlockWithCustomCoinbaseOutputs(
-	txns []*btcutil.Tx, blockVersion int32, blockTime time.Time,
-	mineTo []wire.TxOut) (*btcutil.Block, error) {
+	txns []*bteutil.Tx, blockVersion int32, blockTime time.Time,
+	mineTo []wire.TxOut) (*bteutil.Block, error) {
 
 	h.Lock()
 	defer h.Unlock()
@@ -504,7 +504,7 @@ func (h *Harness) GenerateAndSubmitBlockWithCustomCoinbaseOutputs(
 	if err != nil {
 		return nil, err
 	}
-	prevBlock := btcutil.NewBlock(mBlock)
+	prevBlock := bteutil.NewBlock(mBlock)
 	prevBlock.SetHeight(prevBlockHeight)
 
 	// Create a new block including the specified transactions
@@ -560,7 +560,7 @@ func NextAvailablePort() int {
 
 // baseDir is the directory path of the temp directory for all rpctest files.
 func baseDir() (string, error) {
-	dirPath := filepath.Join(os.TempDir(), "btcd", "rpctest")
+	dirPath := filepath.Join(os.TempDir(), "bted", "rpctest")
 	err := os.MkdirAll(dirPath, 0755)
 	return dirPath, err
 }

@@ -22,22 +22,22 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/btcsuite/btcd/addrmgr"
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/blockchain/indexers"
-	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/btcutil/bloom"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/connmgr"
-	"github.com/btcsuite/btcd/database"
-	"github.com/btcsuite/btcd/mempool"
-	"github.com/btcsuite/btcd/mining"
-	"github.com/btcsuite/btcd/mining/cpuminer"
-	"github.com/btcsuite/btcd/netsync"
-	"github.com/btcsuite/btcd/peer"
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitweb-project/bted/addrmgr"
+	"github.com/bitweb-project/bted/blockchain"
+	"github.com/bitweb-project/bted/blockchain/indexers"
+	"github.com/bitweb-project/bted/bteutil"
+	"github.com/bitweb-project/bted/bteutil/bloom"
+	"github.com/bitweb-project/bted/chaincfg"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/connmgr"
+	"github.com/bitweb-project/bted/database"
+	"github.com/bitweb-project/bted/mempool"
+	"github.com/bitweb-project/bted/mining"
+	"github.com/bitweb-project/bted/mining/cpuminer"
+	"github.com/bitweb-project/bted/netsync"
+	"github.com/bitweb-project/bted/peer"
+	"github.com/bitweb-project/bted/txscript"
+	"github.com/bitweb-project/bted/wire"
 	"github.com/decred/dcrd/lru"
 )
 
@@ -63,7 +63,7 @@ const (
 var (
 	// userAgentName is the user agent name and is used to help identify
 	// ourselves to other bitcoin peers.
-	userAgentName = "btcd"
+	userAgentName = "bted"
 
 	// userAgentVersion is the user agent version and is used to help
 	// identify ourselves to other bitcoin peers.
@@ -595,9 +595,9 @@ func (sp *serverPeer) OnTx(_ *peer.Peer, msg *wire.MsgTx) {
 	}
 
 	// Add the transaction to the known inventory for the peer.
-	// Convert the raw MsgTx to a btcutil.Tx which provides some convenience
+	// Convert the raw MsgTx to a bteutil.Tx which provides some convenience
 	// methods and things such as hash caching.
-	tx := btcutil.NewTx(msg)
+	tx := bteutil.NewTx(msg)
 	iv := wire.NewInvVect(wire.InvTypeTx, tx.Hash())
 	sp.AddKnownInventory(iv)
 
@@ -613,9 +613,9 @@ func (sp *serverPeer) OnTx(_ *peer.Peer, msg *wire.MsgTx) {
 // OnBlock is invoked when a peer receives a block bitcoin message.  It
 // blocks until the bitcoin block has been fully processed.
 func (sp *serverPeer) OnBlock(_ *peer.Peer, msg *wire.MsgBlock, buf []byte) {
-	// Convert the raw MsgBlock to a btcutil.Block which provides some
+	// Convert the raw MsgBlock to a bteutil.Block which provides some
 	// convenience methods and things such as hash caching.
-	block := btcutil.NewBlockFromBlockAndBytes(msg, buf)
+	block := bteutil.NewBlockFromBlockAndBytes(msg, buf)
 
 	// Add the block to the known inventory for the peer.
 	iv := wire.NewInvVect(wire.InvTypeBlock, block.Hash())
@@ -1194,9 +1194,9 @@ func (sp *serverPeer) enforceNodeBloomFlag(cmd string) bool {
 // disconnected if an invalid fee filter value is provided.
 func (sp *serverPeer) OnFeeFilter(_ *peer.Peer, msg *wire.MsgFeeFilter) {
 	// Check that the passed minimum fee is a valid amount.
-	if msg.MinFee < 0 || msg.MinFee > btcutil.MaxSatoshi {
+	if msg.MinFee < 0 || msg.MinFee > bteutil.MaxSatoshi {
 		peerLog.Debugf("Peer %v sent an invalid feefilter '%v' -- "+
-			"disconnecting", sp, btcutil.Amount(msg.MinFee))
+			"disconnecting", sp, bteutil.Amount(msg.MinFee))
 		sp.Disconnect()
 		return
 	}
@@ -1516,7 +1516,7 @@ func (s *server) AnnounceNewTransactions(txns []*mempool.TxDesc) {
 
 // Transaction has one confirmation on the main chain. Now we can mark it as no
 // longer needing rebroadcasting.
-func (s *server) TransactionConfirmed(tx *btcutil.Tx) {
+func (s *server) TransactionConfirmed(tx *bteutil.Tx) {
 	// Rebroadcasting is only necessary when the RPC server is active.
 	if s.rpcServer == nil {
 		return
@@ -2250,7 +2250,7 @@ func (s *server) peerHandler() {
 	if !cfg.DisableDNSSeed {
 		// Add peers discovered through DNS to the address manager.
 		connmgr.SeedFromDNS(activeNetParams.Params, defaultRequiredServices,
-			btcdLookup, func(addrs []*wire.NetAddressV2) {
+			btedLookup, func(addrs []*wire.NetAddressV2) {
 				// Bitcoind uses a lookup of the dns seeder here. This
 				// is rather strange since the values looked up by the
 				// DNS seed lookups will vary quite a lot.
@@ -2629,7 +2629,7 @@ out:
 			// listen port?
 			// XXX this assumes timeout is in seconds.
 			listenPort, err := s.nat.AddPortMapping("tcp", int(lport), int(lport),
-				"btcd listen port", 20*60)
+				"bted listen port", 20*60)
 			if err != nil {
 				srvrLog.Warnf("can't add UPnP port mapping: %v", err)
 			}
@@ -2716,7 +2716,7 @@ func setupRPCListeners() ([]net.Listener, error) {
 	return listeners, nil
 }
 
-// newServer returns a new btcd server configured to listen on addr for the
+// newServer returns a new bted server configured to listen on addr for the
 // bitcoin network type specified by chainParams.  Use start to begin accepting
 // connections from peers.
 func newServer(listenAddrs, agentBlacklist, agentWhitelist []string,
@@ -2731,7 +2731,7 @@ func newServer(listenAddrs, agentBlacklist, agentWhitelist []string,
 		services &^= wire.SFNodeCF
 	}
 
-	amgr := addrmgr.New(cfg.DataDir, btcdLookup)
+	amgr := addrmgr.New(cfg.DataDir, btedLookup)
 
 	var listeners []net.Listener
 	var nat NAT
@@ -2882,7 +2882,7 @@ func newServer(listenAddrs, agentBlacklist, agentWhitelist []string,
 		FetchUtxoView:  s.chain.FetchUtxoView,
 		BestHeight:     func() int32 { return s.chain.BestSnapshot().Height },
 		MedianTimePast: func() time.Time { return s.chain.BestSnapshot().MedianTime },
-		CalcSequenceLock: func(tx *btcutil.Tx, view *blockchain.UtxoViewpoint) (*blockchain.SequenceLock, error) {
+		CalcSequenceLock: func(tx *bteutil.Tx, view *blockchain.UtxoViewpoint) (*blockchain.SequenceLock, error) {
 			return s.chain.CalcSequenceLock(tx, view, true)
 		},
 		IsDeploymentActive: s.chain.IsDeploymentActive,
@@ -2990,7 +2990,7 @@ func newServer(listenAddrs, agentBlacklist, agentWhitelist []string,
 		OnAccept:       s.inboundPeerConnected,
 		RetryDuration:  connectionRetryInterval,
 		TargetOutbound: uint32(targetOutbound),
-		Dial:           btcdDial,
+		Dial:           btedDial,
 		OnConnection:   s.outboundPeerConnected,
 		GetNewAddress:  newAddressFunc,
 	})
@@ -3170,7 +3170,7 @@ func addrStringToNetAddr(addr string) (net.Addr, error) {
 	}
 
 	// Attempt to look up an IP address associated with the parsed host.
-	ips, err := btcdLookup(host)
+	ips, err := btedLookup(host)
 	if err != nil {
 		return nil, err
 	}

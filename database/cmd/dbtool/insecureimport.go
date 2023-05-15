@@ -12,10 +12,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/database"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcd/btcutil"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/database"
+	"github.com/bitweb-project/bted/wire"
+	"github.com/bitweb-project/bted/bteutil"
 )
 
 // importCmd defines the configuration options for the insecureimport command.
@@ -108,7 +108,7 @@ func (bi *blockImporter) readBlock() ([]byte, error) {
 // NOTE: This is not a safe import as it does not verify chain rules.
 func (bi *blockImporter) processBlock(serializedBlock []byte) (bool, error) {
 	// Deserialize the block which includes checks for malformed blocks.
-	block, err := btcutil.NewBlockFromBytes(serializedBlock)
+	block, err := bteutil.NewBlockFromBytes(serializedBlock)
 	if err != nil {
 		return false, err
 	}

@@ -12,7 +12,7 @@ This package is currently a work in progress.
 ## Installation and Updating
 
 ```bash
-$ go get -u github.com/btcsuite/btcd/mining
+$ go get -u github.com/bitweb-project/bted/mining
 ```
 
 ## License

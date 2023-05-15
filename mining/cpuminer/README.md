@@ -16,7 +16,7 @@ now.
 ## Installation and Updating
 
 ```bash
-$ go get -u github.com/btcsuite/btcd/mining/cpuminer
+$ go get -u github.com/bitweb-project/bted/mining/cpuminer
 ```
 
 ## License

@@ -1,15 +1,15 @@
-# This Dockerfile builds btcd from source and creates a small (55 MB) docker container based on alpine linux.
+# This Dockerfile builds bted from source and creates a small (55 MB) docker container based on alpine linux.
 #
-# Clone this repository and run the following command to build and tag a fresh btcd amd64 container:
+# Clone this repository and run the following command to build and tag a fresh bted amd64 container:
 #
-# docker build . -t yourregistry/btcd
+# docker build . -t yourregistry/bted
 #
 # You can use the following command to buid an arm64v8 container:
 #
-# docker build . -t yourregistry/btcd --build-arg ARCH=arm64v8
+# docker build . -t yourregistry/bted --build-arg ARCH=arm64v8
 #
 # For more information how to use this docker image visit:
-# https://github.com/btcsuite/btcd/tree/master/docs
+# https://github.com/btcsuite/bted/tree/master/docs
 #
 # 8333  Mainnet Bitcoin peer-to-peer port
 # 8334  Mainet RPC port
@@ -39,8 +39,8 @@ FROM $ARCH/alpine:3.16
 
 COPY --from=build-container /go/bin /bin
 
-VOLUME ["/root/.btcd"]
+VOLUME ["/root/.bted"]
 
 EXPOSE 8333 8334
 
-ENTRYPOINT ["btcd"]
+ENTRYPOINT ["bted"]

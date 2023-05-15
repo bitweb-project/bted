@@ -7,9 +7,9 @@ package txscript
 import (
 	"fmt"
 
-	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitweb-project/bted/bteutil"
+	"github.com/bitweb-project/bted/chaincfg"
+	"github.com/bitweb-project/bted/wire"
 )
 
 const (
@@ -831,44 +831,44 @@ func payToPubKeyScript(serializedPubKey []byte) ([]byte, error) {
 
 // PayToAddrScript creates a new script to pay a transaction output to a the
 // specified address.
-func PayToAddrScript(addr btcutil.Address) ([]byte, error) {
+func PayToAddrScript(addr bteutil.Address) ([]byte, error) {
 	const nilAddrErrStr = "unable to generate payment script for nil address"
 
 	switch addr := addr.(type) {
-	case *btcutil.AddressPubKeyHash:
+	case *bteutil.AddressPubKeyHash:
 		if addr == nil {
 			return nil, scriptError(ErrUnsupportedAddress,
 				nilAddrErrStr)
 		}
 		return payToPubKeyHashScript(addr.ScriptAddress())
 
-	case *btcutil.AddressScriptHash:
+	case *bteutil.AddressScriptHash:
 		if addr == nil {
 			return nil, scriptError(ErrUnsupportedAddress,
 				nilAddrErrStr)
 		}
 		return payToScriptHashScript(addr.ScriptAddress())
 
-	case *btcutil.AddressPubKey:
+	case *bteutil.AddressPubKey:
 		if addr == nil {
 			return nil, scriptError(ErrUnsupportedAddress,
 				nilAddrErrStr)
 		}
 		return payToPubKeyScript(addr.ScriptAddress())
 
-	case *btcutil.AddressWitnessPubKeyHash:
+	case *bteutil.AddressWitnessPubKeyHash:
 		if addr == nil {
 			return nil, scriptError(ErrUnsupportedAddress,
 				nilAddrErrStr)
 		}
 		return payToWitnessPubKeyHashScript(addr.ScriptAddress())
-	case *btcutil.AddressWitnessScriptHash:
+	case *bteutil.AddressWitnessScriptHash:
 		if addr == nil {
 			return nil, scriptError(ErrUnsupportedAddress,
 				nilAddrErrStr)
 		}
 		return payToWitnessScriptHashScript(addr.ScriptAddress())
-	case *btcutil.AddressTaproot:
+	case *bteutil.AddressTaproot:
 		if addr == nil {
 			return nil, scriptError(ErrUnsupportedAddress,
 				nilAddrErrStr)
@@ -898,7 +898,7 @@ func NullDataScript(data []byte) ([]byte, error) {
 // nrequired of the keys in pubkeys are required to have signed the transaction
 // for success.  An Error with the error code ErrTooManyRequiredSigs will be
 // returned if nrequired is larger than the number of keys provided.
-func MultiSigScript(pubkeys []*btcutil.AddressPubKey, nrequired int) ([]byte, error) {
+func MultiSigScript(pubkeys []*bteutil.AddressPubKey, nrequired int) ([]byte, error) {
 	if len(pubkeys) < nrequired {
 		str := fmt.Sprintf("unable to generate multisig script with "+
 			"%d required signatures when there are only %d public "+
@@ -939,10 +939,10 @@ func PushedData(script []byte) ([][]byte, error) {
 // pubKeyHashToAddrs is a convenience function to attempt to convert the
 // passed hash to a pay-to-pubkey-hash address housed within an address
 // slice.  It is used to consolidate common code.
-func pubKeyHashToAddrs(hash []byte, params *chaincfg.Params) []btcutil.Address {
+func pubKeyHashToAddrs(hash []byte, params *chaincfg.Params) []bteutil.Address {
 	// Skip the pubkey hash if it's invalid for some reason.
-	var addrs []btcutil.Address
-	addr, err := btcutil.NewAddressPubKeyHash(hash, params)
+	var addrs []bteutil.Address
+	addr, err := bteutil.NewAddressPubKeyHash(hash, params)
 	if err == nil {
 		addrs = append(addrs, addr)
 	}
@@ -952,10 +952,10 @@ func pubKeyHashToAddrs(hash []byte, params *chaincfg.Params) []btcutil.Address {
 // scriptHashToAddrs is a convenience function to attempt to convert the passed
 // hash to a pay-to-script-hash address housed within an address slice.  It is
 // used to consolidate common code.
-func scriptHashToAddrs(hash []byte, params *chaincfg.Params) []btcutil.Address {
+func scriptHashToAddrs(hash []byte, params *chaincfg.Params) []bteutil.Address {
 	// Skip the hash if it's invalid for some reason.
-	var addrs []btcutil.Address
-	addr, err := btcutil.NewAddressScriptHashFromHash(hash, params)
+	var addrs []bteutil.Address
+	addr, err := bteutil.NewAddressScriptHashFromHash(hash, params)
 	if err == nil {
 		addrs = append(addrs, addr)
 	}
@@ -967,7 +967,7 @@ func scriptHashToAddrs(hash []byte, params *chaincfg.Params) []btcutil.Address {
 // 'standard' transaction script types.  Any data such as public keys which are
 // invalid are omitted from the results.
 func ExtractPkScriptAddrs(pkScript []byte,
-	chainParams *chaincfg.Params) (ScriptClass, []btcutil.Address, int, error) {
+	chainParams *chaincfg.Params) (ScriptClass, []bteutil.Address, int, error) {
 
 	// Check for pay-to-pubkey-hash script.
 	if hash := extractPubKeyHash(pkScript); hash != nil {
@@ -981,8 +981,8 @@ func ExtractPkScriptAddrs(pkScript []byte,
 
 	// Check for pay-to-pubkey script.
 	if data := extractPubKey(pkScript); data != nil {
-		var addrs []btcutil.Address
-		addr, err := btcutil.NewAddressPubKey(data, chainParams)
+		var addrs []bteutil.Address
+		addr, err := bteutil.NewAddressPubKey(data, chainParams)
 		if err == nil {
 			addrs = append(addrs, addr)
 		}
@@ -994,9 +994,9 @@ func ExtractPkScriptAddrs(pkScript []byte,
 	details := extractMultisigScriptDetails(scriptVersion, pkScript, true)
 	if details.valid {
 		// Convert the public keys while skipping any that are invalid.
-		addrs := make([]btcutil.Address, 0, len(details.pubKeys))
+		addrs := make([]bteutil.Address, 0, len(details.pubKeys))
 		for _, pubkey := range details.pubKeys {
-			addr, err := btcutil.NewAddressPubKey(pubkey, chainParams)
+			addr, err := bteutil.NewAddressPubKey(pubkey, chainParams)
 			if err == nil {
 				addrs = append(addrs, addr)
 			}
@@ -1011,8 +1011,8 @@ func ExtractPkScriptAddrs(pkScript []byte,
 	}
 
 	if hash := extractWitnessPubKeyHash(pkScript); hash != nil {
-		var addrs []btcutil.Address
-		addr, err := btcutil.NewAddressWitnessPubKeyHash(hash, chainParams)
+		var addrs []bteutil.Address
+		addr, err := bteutil.NewAddressWitnessPubKeyHash(hash, chainParams)
 		if err == nil {
 			addrs = append(addrs, addr)
 		}
@@ -1020,8 +1020,8 @@ func ExtractPkScriptAddrs(pkScript []byte,
 	}
 
 	if hash := extractWitnessV0ScriptHash(pkScript); hash != nil {
-		var addrs []btcutil.Address
-		addr, err := btcutil.NewAddressWitnessScriptHash(hash, chainParams)
+		var addrs []bteutil.Address
+		addr, err := bteutil.NewAddressWitnessScriptHash(hash, chainParams)
 		if err == nil {
 			addrs = append(addrs, addr)
 		}
@@ -1029,8 +1029,8 @@ func ExtractPkScriptAddrs(pkScript []byte,
 	}
 
 	if rawKey := extractWitnessV1KeyBytes(pkScript); rawKey != nil {
-		var addrs []btcutil.Address
-		addr, err := btcutil.NewAddressTaproot(rawKey, chainParams)
+		var addrs []bteutil.Address
+		addr, err := bteutil.NewAddressTaproot(rawKey, chainParams)
 		if err == nil {
 			addrs = append(addrs, addr)
 		}

@@ -10,9 +10,9 @@ import (
 	"encoding/hex"
 	"encoding/json"
 
-	"github.com/btcsuite/btcd/btcjson"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitweb-project/bted/btcjson"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/wire"
 )
 
 // FutureGetBestBlockHashResult is a future promise to deliver the result of a
@@ -84,7 +84,7 @@ func (c *Client) waitForGetBlockRes(respChan chan *Response, hash string,
 	res, err := ReceiveFuture(respChan)
 
 	// If we receive an invalid parameter error, then we may be
-	// communicating with a btcd node which only understands the legacy
+	// communicating with a bted node which only understands the legacy
 	// request, so we'll try that.
 	if err, ok := err.(*btcjson.RPCError); ok &&
 		err.Code == btcjson.ErrRPCInvalidParams.Code {

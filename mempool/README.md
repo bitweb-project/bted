@@ -74,7 +74,7 @@ be an exhaustive list.
 ## Installation and Updating
 
 ```bash
-$ go get -u github.com/btcsuite/btcd/mempool
+$ go get -u github.com/bitweb-project/bted/mempool
 ```
 
 ## License

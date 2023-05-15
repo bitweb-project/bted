@@ -18,10 +18,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitweb-project/bted/blockchain"
+	"github.com/bitweb-project/bted/chaincfg"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/wire"
 	"github.com/btcsuite/go-socks/socks"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/decred/dcrd/lru"
@@ -2212,7 +2212,7 @@ func (p *Peer) waitToFinishNegotiation(pver uint32) error {
 //   4. We send our verack.
 //   5. Wait until sendaddrv2 or verack is received. Unknown messages are
 //      skipped as it could be wtxidrelay or a different message in the future
-//      that btcd does not implement but bitcoind does.
+//      that bted does not implement but bitcoind does.
 //   6. If remote peer sent sendaddrv2 above, wait until receipt of verack.
 func (p *Peer) negotiateInboundProtocol() error {
 	if err := p.readRemoteVersionMsg(); err != nil {

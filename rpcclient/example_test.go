@@ -6,7 +6,7 @@ package rpcclient
 
 import (
 	"fmt"
-	"github.com/btcsuite/btcd/btcjson"
+	"github.com/bitweb-project/bted/btcjson"
 )
 
 var connCfg = &ConnConfig{
@@ -129,7 +129,7 @@ func ExampleClient_GetTxOutSetInfo() {
 		panic(err)
 	}
 
-	fmt.Println(r.TotalAmount.String()) // 20947654.56996054 BTC
+	fmt.Println(r.TotalAmount.String()) // 20947654.56996054 BTE
 	fmt.Println(r.BestBlock.String())   // 000000000000005f94116250e2407310463c0a7cf950f1af9ebe935b1c0687ab
 	fmt.Println(r.TxOuts)               // 24280607
 	fmt.Println(r.Transactions)         // 9285603

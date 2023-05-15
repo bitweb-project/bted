@@ -42,7 +42,7 @@ jobs:
         uses: shogo82148/actions-goveralls@v1
         with:
           path-to-profile: coverage.txt
-          flag-name: btcd
+          flag-name: bted
           parallel: true
 
       - name: Send btcec
@@ -52,18 +52,18 @@ jobs:
           flag-name: btcec
           parallel: true
 
-      - name: Send btcutil coverage
+      - name: Send bteutil coverage
         uses: shogo82148/actions-goveralls@v1
         with:
-          path-to-profile: btcutil/coverage.txt
-          flag-name: btcutil
+          path-to-profile: bteutil/coverage.txt
+          flag-name: bteutil
           parallel: true
 
-      - name: Send btcutil coverage for psbt package
+      - name: Send bteutil coverage for psbt package
         uses: shogo82148/actions-goveralls@v1
         with:
-          path-to-profile: btcutil/psbt/coverage.txt
-          flag-name: btcutilpsbt
+          path-to-profile: bteutil/psbt/coverage.txt
+          flag-name: bteutilpsbt
           parallel: true
       
       - name: Notify coveralls all reports sent

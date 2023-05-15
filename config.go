@@ -21,26 +21,26 @@ import (
 	"strings"
 	"time"
 
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/connmgr"
-	"github.com/btcsuite/btcd/database"
-	_ "github.com/btcsuite/btcd/database/ffldb"
-	"github.com/btcsuite/btcd/mempool"
-	"github.com/btcsuite/btcd/peer"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcd/btcutil"
+	"github.com/bitweb-project/bted/blockchain"
+	"github.com/bitweb-project/bted/chaincfg"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/connmgr"
+	"github.com/bitweb-project/bted/database"
+	_ "github.com/bitweb-project/bted/database/ffldb"
+	"github.com/bitweb-project/bted/mempool"
+	"github.com/bitweb-project/bted/peer"
+	"github.com/bitweb-project/bted/wire"
+	"github.com/bitweb-project/bted/bteutil"
 	"github.com/btcsuite/go-socks/socks"
 	flags "github.com/jessevdk/go-flags"
 )
 
 const (
-	defaultConfigFilename        = "btcd.conf"
+	defaultConfigFilename        = "bted.conf"
 	defaultDataDirname           = "data"
 	defaultLogLevel              = "info"
 	defaultLogDirname            = "logs"
-	defaultLogFilename           = "btcd.log"
+	defaultLogFilename           = "bted.log"
 	defaultMaxPeers              = 125
 	defaultBanDuration           = time.Hour * 24
 	defaultBanThreshold          = 100
@@ -63,13 +63,13 @@ const (
 	defaultMaxOrphanTransactions = 100
 	defaultMaxOrphanTxSize       = 100000
 	defaultSigCacheMaxSize       = 100000
-	sampleConfigFilename         = "sample-btcd.conf"
+	sampleConfigFilename         = "sample-bted.conf"
 	defaultTxIndex               = false
 	defaultAddrIndex             = false
 )
 
 var (
-	defaultHomeDir     = btcutil.AppDataDir("btcd", false)
+	defaultHomeDir     = bteutil.AppDataDir("bted", false)
 	defaultConfigFile  = filepath.Join(defaultHomeDir, defaultConfigFilename)
 	defaultDataDir     = filepath.Join(defaultHomeDir, defaultDataDirname)
 	knownDbTypes       = database.SupportedDrivers()
@@ -91,15 +91,15 @@ func minUint32(a, b uint32) uint32 {
 	return b
 }
 
-// config defines the configuration options for btcd.
+// config defines the configuration options for bted.
 //
 // See loadConfig for details on the configuration load process.
 type config struct {
 	AddCheckpoints       []string      `long:"addcheckpoint" description:"Add a custom checkpoint.  Format: '<height>:<hash>'"`
 	AddPeers             []string      `short:"a" long:"addpeer" description:"Add a peer to connect with at startup"`
 	AddrIndex            bool          `long:"addrindex" description:"Maintain a full address-based transaction index which makes the searchrawtransactions RPC available"`
-	AgentBlacklist       []string      `long:"agentblacklist" description:"A comma separated list of user-agent substrings which will cause btcd to reject any peers whose user-agent contains any of the blacklisted substrings."`
-	AgentWhitelist       []string      `long:"agentwhitelist" description:"A comma separated list of user-agent substrings which will cause btcd to require all peers' user-agents to contain one of the whitelisted substrings. The blacklist is applied before the blacklist, and an empty whitelist will allow all agents that do not fail the blacklist."`
+	AgentBlacklist       []string      `long:"agentblacklist" description:"A comma separated list of user-agent substrings which will cause bted to reject any peers whose user-agent contains any of the blacklisted substrings."`
+	AgentWhitelist       []string      `long:"agentwhitelist" description:"A comma separated list of user-agent substrings which will cause bted to require all peers' user-agents to contain one of the whitelisted substrings. The blacklist is applied before the blacklist, and an empty whitelist will allow all agents that do not fail the blacklist."`
 	BanDuration          time.Duration `long:"banduration" description:"How long to ban misbehaving peers.  Valid time units are {s, m, h}.  Minimum 1 second"`
 	BanThreshold         uint32        `long:"banthreshold" description:"Maximum allowed ban score before disconnecting and banning misbehaving peers."`
 	BlockMaxSize         uint32        `long:"blockmaxsize" description:"Maximum block size in bytes to be used when creating a block"`
@@ -111,7 +111,6 @@ type config struct {
 	ConfigFile           string        `short:"C" long:"configfile" description:"Path to configuration file"`
 	ConnectPeers         []string      `long:"connect" description:"Connect only to the specified peers at startup"`
 	CPUProfile           string        `long:"cpuprofile" description:"Write CPU profile to the specified file"`
-	MemoryProfile        string        `long:"memprofile" description:"Write memory profile to the specified file"`
 	DataDir              string        `short:"b" long:"datadir" description:"Directory to store data"`
 	DbType               string        `long:"dbtype" description:"Database backend to use for the Block Chain"`
 	DebugLevel           string        `short:"d" long:"debuglevel" description:"Logging level for all subsystems {trace, debug, info, warn, error, critical} -- You may also specify <subsystem>=<level>,<subsystem2>=<level>,... to set the log level for individual subsystems -- Use show to list available subsystems"`
@@ -126,7 +125,7 @@ type config struct {
 	MaxOrphanTxs         int           `long:"maxorphantx" description:"Max number of orphan transactions to keep in memory"`
 	MaxPeers             int           `long:"maxpeers" description:"Max number of inbound and outbound peers"`
 	MiningAddrs          []string      `long:"miningaddr" description:"Add the specified payment address to the list of addresses to use for generated blocks -- At least one address is required if the generate option is set"`
-	MinRelayTxFee        float64       `long:"minrelaytxfee" description:"The minimum transaction fee in BTC/kB to be considered a non-zero fee."`
+	MinRelayTxFee        float64       `long:"minrelaytxfee" description:"The minimum transaction fee in BTE/kB to be considered a non-zero fee."`
 	DisableBanning       bool          `long:"nobanning" description:"Disable banning of misbehaving peers"`
 	NoCFilters           bool          `long:"nocfilters" description:"Disable committed filtering (CF) support"`
 	DisableCheckpoints   bool          `long:"nocheckpoints" description:"Disable built-in checkpoints.  Don't do this unless you know what you're doing."`
@@ -178,8 +177,8 @@ type config struct {
 	oniondial            func(string, string, time.Duration) (net.Conn, error)
 	dial                 func(string, string, time.Duration) (net.Conn, error)
 	addCheckpoints       []chaincfg.Checkpoint
-	miningAddrs          []btcutil.Address
-	minRelayTxFee        btcutil.Amount
+	miningAddrs          []bteutil.Address
+	minRelayTxFee        bteutil.Amount
 	whitelists           []*net.IPNet
 }
 
@@ -408,7 +407,7 @@ func newConfigParser(cfg *config, so *serviceOptions, options flags.Options) *fl
 // 	3) Load configuration file overwriting defaults with any specified options
 // 	4) Parse CLI options and overwrite/add any specified options
 //
-// The above results in btcd functioning properly without any config settings
+// The above results in bted functioning properly without any config settings
 // while still allowing the user to override settings with config files and
 // command line options.  Command line options always take precedence.
 func loadConfig() (*config, []string, error) {
@@ -427,7 +426,7 @@ func loadConfig() (*config, []string, error) {
 		DbType:               defaultDbType,
 		RPCKey:               defaultRPCKeyFile,
 		RPCCert:              defaultRPCCertFile,
-		MinRelayTxFee:        mempool.DefaultMinRelayTxFee.ToBTC(),
+		MinRelayTxFee:        mempool.DefaultMinRelayTxFee.ToBTE(),
 		FreeTxRelayLimit:     defaultFreeTxRelayLimit,
 		TrickleInterval:      defaultTrickleInterval,
 		BlockMinSize:         defaultBlockMinSize,
@@ -788,7 +787,7 @@ func loadConfig() (*config, []string, error) {
 	}
 
 	if cfg.DisableRPC {
-		btcdLog.Infof("RPC service is disabled")
+		btedLog.Infof("RPC service is disabled")
 	}
 
 	// Default RPC to listen on localhost only.
@@ -814,7 +813,7 @@ func loadConfig() (*config, []string, error) {
 	}
 
 	// Validate the the minrelaytxfee.
-	cfg.minRelayTxFee, err = btcutil.NewAmount(cfg.MinRelayTxFee)
+	cfg.minRelayTxFee, err = bteutil.NewAmount(cfg.MinRelayTxFee)
 	if err != nil {
 		str := "%s: invalid minrelaytxfee: %v"
 		err := fmt.Errorf(str, funcName, err)
@@ -926,9 +925,9 @@ func loadConfig() (*config, []string, error) {
 	}
 
 	// Check mining addresses are valid and saved parsed versions.
-	cfg.miningAddrs = make([]btcutil.Address, 0, len(cfg.MiningAddrs))
+	cfg.miningAddrs = make([]bteutil.Address, 0, len(cfg.MiningAddrs))
 	for _, strAddr := range cfg.MiningAddrs {
-		addr, err := btcutil.DecodeAddress(strAddr, activeNetParams.Params)
+		addr, err := bteutil.DecodeAddress(strAddr, activeNetParams.Params)
 		if err != nil {
 			str := "%s: mining address '%s' failed to decode: %v"
 			err := fmt.Errorf(str, funcName, strAddr, err)
@@ -1141,13 +1140,13 @@ func loadConfig() (*config, []string, error) {
 	// done.  This prevents the warning on help messages and invalid
 	// options.  Note this should go directly before the return.
 	if configFileError != nil {
-		btcdLog.Warnf("%v", configFileError)
+		btedLog.Warnf("%v", configFileError)
 	}
 
 	return &cfg, remainingArgs, nil
 }
 
-// createDefaultConfig copies the file sample-btcd.conf to the given destination path,
+// createDefaultConfig copies the file sample-bted.conf to the given destination path,
 // and populates it with some randomly generated RPC username and password.
 func createDefaultConfigFile(destinationPath string) error {
 	// Create the destination directory if it does not exists
@@ -1214,12 +1213,12 @@ func createDefaultConfigFile(destinationPath string) error {
 	return nil
 }
 
-// btcdDial connects to the address on the named network using the appropriate
+// btedDial connects to the address on the named network using the appropriate
 // dial function depending on the address and configuration options.  For
 // example, .onion addresses will be dialed using the onion specific proxy if
 // one was specified, but will otherwise use the normal dial function (which
 // could itself use a proxy or not).
-func btcdDial(addr net.Addr) (net.Conn, error) {
+func btedDial(addr net.Addr) (net.Conn, error) {
 	if strings.Contains(addr.String(), ".onion:") {
 		return cfg.oniondial(addr.Network(), addr.String(),
 			defaultConnectTimeout)
@@ -1227,14 +1226,14 @@ func btcdDial(addr net.Addr) (net.Conn, error) {
 	return cfg.dial(addr.Network(), addr.String(), defaultConnectTimeout)
 }
 
-// btcdLookup resolves the IP of the given host using the correct DNS lookup
+// btedLookup resolves the IP of the given host using the correct DNS lookup
 // function depending on the configuration options.  For example, addresses will
 // be resolved using tor when the --proxy flag was specified unless --noonion
 // was also specified in which case the normal system DNS resolver will be used.
 //
 // Any attempt to resolve a tor address (.onion) will return an error since they
 // are not intended to be resolved outside of the tor proxy.
-func btcdLookup(host string) ([]net.IP, error) {
+func btedLookup(host string) ([]net.IP, error) {
 	if strings.HasSuffix(host, ".onion") {
 		return nil, fmt.Errorf("attempt to resolve tor address %s", host)
 	}

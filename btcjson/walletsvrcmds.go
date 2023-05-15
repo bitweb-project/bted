@@ -12,7 +12,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/btcsuite/btcd/btcutil"
+	"github.com/bitweb-project/bted/bteutil"
 )
 
 // AddMultisigAddressCmd defines the addmutisigaddress JSON-RPC command.
@@ -563,7 +563,7 @@ func NewLockUnspentCmd(unlock bool, transactions []TransactionInput) *LockUnspen
 type MoveCmd struct {
 	FromAccount string
 	ToAccount   string
-	Amount      float64 // In BTC
+	Amount      float64 // In BTE
 	MinConf     *int    `jsonrpcdefault:"1"`
 	Comment     *string
 }
@@ -587,7 +587,7 @@ func NewMoveCmd(fromAccount, toAccount string, amount float64, minConf *int, com
 type SendFromCmd struct {
 	FromAccount string
 	ToAddress   string
-	Amount      float64 // In BTC
+	Amount      float64 // In BTE
 	MinConf     *int    `jsonrpcdefault:"1"`
 	Comment     *string
 	CommentTo   *string
@@ -612,7 +612,7 @@ func NewSendFromCmd(fromAccount, toAddress string, amount float64, minConf *int,
 // SendManyCmd defines the sendmany JSON-RPC command.
 type SendManyCmd struct {
 	FromAccount string
-	Amounts     map[string]float64 `jsonrpcusage:"{\"address\":amount,...}"` // In BTC
+	Amounts     map[string]float64 `jsonrpcusage:"{\"address\":amount,...}"` // In BTE
 	MinConf     *int               `jsonrpcdefault:"1"`
 	Comment     *string
 }
@@ -670,7 +670,7 @@ func NewSetAccountCmd(address, account string) *SetAccountCmd {
 
 // SetTxFeeCmd defines the settxfee JSON-RPC command.
 type SetTxFeeCmd struct {
-	Amount float64 // In BTC
+	Amount float64 // In BTE
 }
 
 // NewSetTxFeeCmd returns a new instance which can be used to issue a settxfee
@@ -737,7 +737,7 @@ type RawTxWitnessInput struct {
 	ScriptPubKey  string   `json:"scriptPubKey"`
 	RedeemScript  *string  `json:"redeemScript,omitempty"`
 	WitnessScript *string  `json:"witnessScript,omitempty"`
-	Amount        *float64 `json:"amount,omitempty"` // In BTC
+	Amount        *float64 `json:"amount,omitempty"` // In BTE
 }
 
 // SignRawTransactionWithWalletCmd defines the signrawtransactionwithwallet JSON-RPC command.
@@ -1015,8 +1015,8 @@ type PsbtOutput map[string]interface{}
 
 // NewPsbtOutput returns a new instance of a PSBT output to use with the
 // WalletCreateFundedPsbtCmd command.
-func NewPsbtOutput(address string, amount btcutil.Amount) PsbtOutput {
-	return PsbtOutput{address: amount.ToBTC()}
+func NewPsbtOutput(address string, amount bteutil.Amount) PsbtOutput {
+	return PsbtOutput{address: amount.ToBTE()}
 }
 
 // NewPsbtDataOutput returns a new instance of a PSBT data output to use with

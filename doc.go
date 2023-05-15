@@ -3,22 +3,22 @@
 // license that can be found in the LICENSE file.
 
 /*
-btcd is a full-node bitcoin implementation written in Go.
+bted is a full-node bitcoin implementation written in Go.
 
-The default options are sane for most users.  This means btcd will work 'out of
+The default options are sane for most users.  This means bted will work 'out of
 the box' for most users.  However, there are also a wide variety of flags that
 can be used to control it.
 
 The following section provides a usage overview which enumerates the flags.  An
 interesting point to note is that the long form of all of these options
 (except -C) can be specified in a configuration file that is automatically
-parsed when btcd starts up.  By default, the configuration file is located at
-~/.btcd/btcd.conf on POSIX-style operating systems and %LOCALAPPDATA%\btcd\btcd.conf
+parsed when bted starts up.  By default, the configuration file is located at
+~/.bted/bted.conf on POSIX-style operating systems and %LOCALAPPDATA%\bted\bted.conf
 on Windows.  The -C (--configfile) flag, as shown below, can be used to override
 this location.
 
 Usage:
-  btcd [OPTIONS]
+  bted [OPTIONS]
 
 Application Options:
       --addcheckpoint=        Add a custom checkpoint.  Format:
@@ -82,7 +82,7 @@ Application Options:
                               addresses to use for generated blocks -- At least
                               one address is required if the generate option is
                               set
-      --minrelaytxfee=        The minimum transaction fee in BTC/kB to be
+      --minrelaytxfee=        The minimum transaction fee in BTE/kB to be
                               considered a non-zero fee. (default: 1e-05)
       --nobanning             Disable banning of misbehaving peers
       --nocfilters            Disable committed filtering (CF) support

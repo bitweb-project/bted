@@ -16,10 +16,10 @@ import (
 
 	"golang.org/x/crypto/ripemd160"
 
-	"github.com/btcsuite/btcd/btcec/v2"
-	"github.com/btcsuite/btcd/btcec/v2/ecdsa"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitweb-project/bted/btcec/v2"
+	"github.com/bitweb-project/bted/btcec/v2/ecdsa"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/wire"
 )
 
 // An opcode defines the information related to a txscript opcode.  opfunc, if
@@ -33,9 +33,9 @@ type opcode struct {
 	opfunc func(*opcode, []byte, *Engine) error
 }
 
-// These constants are the values of the official opcodes used on the btc wiki,
+// These constants are the values of the official opcodes used on the bte wiki,
 // in bitcoin core and in most if not all other references and software related
-// to handling BTC scripts.
+// to handling BTE scripts.
 const (
 	OP_0                   = 0x00 // 0
 	OP_FALSE               = 0x00 // 0 - AKA OP_0

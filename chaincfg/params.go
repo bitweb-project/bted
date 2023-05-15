@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/wire"
 )
 
 // These variables are the chain proof-of-work limit parameters for each default
@@ -25,7 +25,7 @@ var (
 
 	// mainPowLimit is the highest proof of work value a Bitcoin block can
 	// have for the main network.  It is the value 2^224 - 1.
-	mainPowLimit = new(big.Int).Sub(new(big.Int).Lsh(bigOne, 224), bigOne)
+	mainPowLimit = new(big.Int).Sub(new(big.Int).Lsh(bigOne, 245), bigOne)
 
 	// regressionPowLimit is the highest proof of work value a Bitcoin block
 	// can have for the regression test network.  It is the value 2^255 - 1.
@@ -33,16 +33,16 @@ var (
 
 	// testNet3PowLimit is the highest proof of work value a Bitcoin block
 	// can have for the test network (version 3).  It is the value
-	// 2^224 - 1.
-	testNet3PowLimit = new(big.Int).Sub(new(big.Int).Lsh(bigOne, 224), bigOne)
+	// 2^226 - 1.
+	testNet3PowLimit = new(big.Int).Sub(new(big.Int).Lsh(bigOne, 256), bigOne)
 
 	// simNetPowLimit is the highest proof of work value a Bitcoin block
 	// can have for the simulation test network.  It is the value 2^255 - 1.
 	simNetPowLimit = new(big.Int).Sub(new(big.Int).Lsh(bigOne, 255), bigOne)
 
 	// sigNetPowLimit is the highest proof of work value a bitcoin block can
-	// have for the signet test network. It is the value 0x0377ae << 216.
-	sigNetPowLimit = new(big.Int).Lsh(new(big.Int).SetInt64(0x0377ae), 216)
+	// have for the signet test network. It is the value 2^256 - 1.
+	sigNetPowLimit = new(big.Int).Sub(new(big.Int).Lsh(bigOne, 256), bigOne)
 
 	// DefaultSignetChallenge is the byte representation of the signet
 	// challenge for the default (public, Taproot enabled) signet network.
@@ -50,6 +50,7 @@ var (
 	//  1 03ad5e0edad18cb1f0fc0d28a3d4f1f3e445640337489abb10404f2d1e086be430
 	//  0359ef5021964fe22d6f8e05b2463c9540ce96883fe3b278760f048f5189f2e6c4 2
 	//  OP_CHECKMULTISIG
+
 	DefaultSignetChallenge, _ = hex.DecodeString(
 		"512103ad5e0edad18cb1f0fc0d28a3d4f1f3e445640337489abb10404f2d" +
 			"1e086be430210359ef5021964fe22d6f8e05b2463c9540ce9688" +
@@ -59,11 +60,10 @@ var (
 	// DefaultSignetDNSSeeds is the list of seed nodes for the default
 	// (public, Taproot enabled) signet network.
 	DefaultSignetDNSSeeds = []DNSSeed{
-		{"178.128.221.177", false},
-		{"2a01:7c8:d005:390::5", false},
-		{"v7ajjeirttkbnt32wpy3c6w3emwnfr3fkla7hpxcfokr3ysd3kqtzmqd.onion:38333", false},
+		{"seedsig.bitwebcore.net", false},
 	}
 )
+
 
 // Checkpoint identifies a known good point in the block chain.  Using
 // checkpoints allows a few optimizations for old blocks during initial download
@@ -274,69 +274,52 @@ type Params struct {
 var MainNetParams = Params{
 	Name:        "mainnet",
 	Net:         wire.MainNet,
-	DefaultPort: "8333",
+	DefaultPort: "1604",
 	DNSSeeds: []DNSSeed{
-		{"seed.bitcoin.sipa.be", true},
-		{"dnsseed.bluematt.me", true},
-		{"dnsseed.bitcoin.dashjr.org", false},
-		{"seed.bitcoinstats.com", true},
-		{"seed.bitnodes.io", false},
-		{"seed.bitcoin.jonasschnelli.ch", true},
+		{"seed.bitwebcore.net", true},
+		{"seed1.bitwebcore.net", true},
+		{"seed2.bitwebcore.net", false},
+		{"seedbitweb.scalaris.info", true},
+		{"seedbitweb2.scalaris.info", false},
+		{"seedbitweb3.scalaris.info", true},
 	},
 
 	// Chain parameters
 	GenesisBlock:             &genesisBlock,
 	GenesisHash:              &genesisHash,
 	PowLimit:                 mainPowLimit,
-	PowLimitBits:             0x1d00ffff,
-	BIP0034Height:            227931, // 000000000000024b89b42a942fe0d9fea3bb44ab7bd1b19115dd6a759c0808b8
-	BIP0065Height:            388381, // 000000000000000004c2b624ed5d7756c508d90fd0da2c7c679febfa6c4735f0
-	BIP0066Height:            363725, // 00000000000000000379eaa19dce8c9b722d46ae6a57c2f1a988119488b50931
+	PowLimitBits:             0x1f1fffff,
+	BIP0034Height:            17, // 000000000000024b89b42a942fe0d9fea3bb44ab7bd1b19115dd6a759c0808b8
+	BIP0065Height:            1, // 000000000000000004c2b624ed5d7756c508d90fd0da2c7c679febfa6c4735f0
+	BIP0066Height:            1, // 00000000000000000379eaa19dce8c9b722d46ae6a57c2f1a988119488b50931
 	CoinbaseMaturity:         100,
-	SubsidyReductionInterval: 210000,
-	TargetTimespan:           time.Hour * 24 * 14, // 14 days
-	TargetTimePerBlock:       time.Minute * 10,    // 10 minutes
+	SubsidyReductionInterval: 840000,
+	TargetTimespan:           time.Hour * 1, // 1 hour
+	TargetTimePerBlock:       time.Minute * 1,    // 1 minute
 	RetargetAdjustmentFactor: 4,                   // 25% less, 400% more
 	ReduceMinDifficulty:      false,
 	MinDiffReductionTime:     0,
 	GenerateSupported:        false,
 
 	// Checkpoints ordered from oldest to newest.
-	Checkpoints: []Checkpoint{
-		{11111, newHashFromStr("0000000069e244f73d78e8fd29ba2fd2ed618bd6fa2ee92559f542fdb26e7c1d")},
-		{33333, newHashFromStr("000000002dd5588a74784eaa7ab0507a18ad16a236e7b1ce69f00d7ddfb5d0a6")},
-		{74000, newHashFromStr("0000000000573993a3c9e41ce34471c079dcf5f52a0e824a81e7f953b8661a20")},
-		{105000, newHashFromStr("00000000000291ce28027faea320c8d2b054b2e0fe44a773f3eefb151d6bdc97")},
-		{134444, newHashFromStr("00000000000005b12ffd4cd315cd34ffd4a594f430ac814c91184a0d42d2b0fe")},
-		{168000, newHashFromStr("000000000000099e61ea72015e79632f216fe6cb33d7899acb35b75c8303b763")},
-		{193000, newHashFromStr("000000000000059f452a5f7340de6682a977387c17010ff6e6c3bd83ca8b1317")},
-		{210000, newHashFromStr("000000000000048b95347e83192f69cf0366076336c639f9b7228e9ba171342e")},
-		{216116, newHashFromStr("00000000000001b4f4b433e81ee46494af945cf96014816a4e2370f11b23df4e")},
-		{225430, newHashFromStr("00000000000001c108384350f74090433e7fcf79a606b8e797f065b130575932")},
-		{250000, newHashFromStr("000000000000003887df1f29024b06fc2200b55f8af8f35453d7be294df2d214")},
-		{267300, newHashFromStr("000000000000000a83fbd660e918f218bf37edd92b748ad940483c7c116179ac")},
-		{279000, newHashFromStr("0000000000000001ae8c72a0b0c301f67e3afca10e819efa9041e458e9bd7e40")},
-		{300255, newHashFromStr("0000000000000000162804527c6e9b9f0563a280525f9d08c12041def0a0f3b2")},
-		{319400, newHashFromStr("000000000000000021c6052e9becade189495d1c539aa37c58917305fd15f13b")},
-		{343185, newHashFromStr("0000000000000000072b8bf361d01a6ba7d445dd024203fafc78768ed4368554")},
-		{352940, newHashFromStr("000000000000000010755df42dba556bb72be6a32f3ce0b6941ce4430152c9ff")},
-		{382320, newHashFromStr("00000000000000000a8dc6ed5b133d0eb2fd6af56203e4159789b092defd8ab2")},
-		{400000, newHashFromStr("000000000000000004ec466ce4732fe6f1ed1cddc2ed4b328fff5224276e3f6f")},
-		{430000, newHashFromStr("000000000000000001868b2bb3a285f3cc6b33ea234eb70facf4dcdf22186b87")},
-		{460000, newHashFromStr("000000000000000000ef751bbce8e744ad303c47ece06c8d863e4d417efc258c")},
-		{490000, newHashFromStr("000000000000000000de069137b17b8d5a3dfbd5b145b2dcfb203f15d0c4de90")},
-		{520000, newHashFromStr("0000000000000000000d26984c0229c9f6962dc74db0a6d525f2f1640396f69c")},
-		{550000, newHashFromStr("000000000000000000223b7a2298fb1c6c75fb0efc28a4c56853ff4112ec6bc9")},
-		{560000, newHashFromStr("0000000000000000002c7b276daf6efb2b6aa68e2ce3be67ef925b3264ae7122")},
-		{563378, newHashFromStr("0000000000000000000f1c54590ee18d15ec70e68c8cd4cfbadb1b4f11697eee")},
-		{597379, newHashFromStr("00000000000000000005f8920febd3925f8272a6a71237563d78c2edfdd09ddf")},
-		{623950, newHashFromStr("0000000000000000000f2adce67e49b0b6bdeb9de8b7c3d7e93b21e7fc1e819d")},
-		{654683, newHashFromStr("0000000000000000000b9d2ec5a352ecba0592946514a92f14319dc2b367fc72")},
-		{691719, newHashFromStr("00000000000000000008a89e854d57e5667df88f1cdef6fde2fbca1de5b639ad")},
-		{724466, newHashFromStr("000000000000000000052d314a259755ca65944e68df6b12a067ea8f1f5a7091")},
-		{751565, newHashFromStr("00000000000000000009c97098b5295f7e5f183ac811fb5d1534040adb93cabd")},
-	},
-
+//	Checkpoints: []Checkpoint{
+//        {1, newHashFromStr("001d498cbcd92d9b36fee933caf1551dd457bf710ec988e033faca697aff6a90")},
+//        {15, newHashFromStr("0013c1537f3c4984241c3c5b93d894dfef491eef0b82d87a5b7d0edf65961a41")},
+//        {31, newHashFromStr("000c6f6a7e9478859051e24eaaa0aec508583bc1fc262108804479be5c557d74")},
+//        {47, newHashFromStr("001c6020b3d984739d307fa9f2adb897339449c23dbe78bb50fc365daf41b704")},
+//        {63, newHashFromStr("00015b10a4a824ad4751c64d4027c82219f312c40f1aff2e9248355a8707347f")},
+//        {79, newHashFromStr("00001f6f577a1f232a117a8f16f4efb93fc1407fbec156ac1fea7d621db84ed8")},
+//        {89, newHashFromStr("0001f2ee3cafa3a390d5f8f368e1296b4fbf55719c10d170223df30b9836cf5b")},
+//        {90, newHashFromStr("00023c2933e8069729e6d568038ea070f5c50a07145ca960e8e21a53e0640e26")},
+//        {97, newHashFromStr("00046f205cad5e5085a939194e308d9569553d435f0fe1e3a13c99b0d34f76b1")},
+//        {662, newHashFromStr("00021b08ddf59cd9d9e396ef46c6d57644b3aac7977d271c966f66b63df45dd1")},
+//        {2000, newHashFromStr("000002bf997a02b3e403c8ce9a87699127864e344ed966b03be16e14e5662cf5")},
+//        {9074, newHashFromStr("0000007e1d70d529752b87fe47f979ae5f8f27bbc987dd0c8b21c9c5a6f3099b")},
+//        {12167, newHashFromStr("0000006fa4023de2a1d4bd712e7d7aafa15a273f6c78b32bd87185846e0cc903")},
+//        {606942, newHashFromStr("0000000d7c7c25d0e2a8a8ff4013ae7154ba2d0c0217dc71b942f41af7be990a")},
+//        {939796, newHashFromStr("0000040a3e7b559aea417d3f886c0e8fe69f1f0530800424b9ea739b1f2c8498")},
+//	},
+	Checkpoints: nil,
 	// Consensus rule change deployments.
 	//
 	// The miner confirmation window is defined as:
@@ -347,7 +330,7 @@ var MainNetParams = Params{
 		DeploymentTestDummy: {
 			BitNumber: 28,
 			DeploymentStarter: NewMedianTimeDeploymentStarter(
-				time.Unix(11991456010, 0), // January 1, 2008 UTC
+				time.Unix(1199145601, 0), // January 1, 2008 UTC
 			),
 			DeploymentEnder: NewMedianTimeDeploymentEnder(
 				time.Unix(1230767999, 0), // December 31, 2008 UTC
@@ -367,31 +350,31 @@ var MainNetParams = Params{
 		DeploymentCSV: {
 			BitNumber: 0,
 			DeploymentStarter: NewMedianTimeDeploymentStarter(
-				time.Unix(1462060800, 0), // May 1st, 2016
+				time.Time{}, // May 1st, 2016
 			),
 			DeploymentEnder: NewMedianTimeDeploymentEnder(
-				time.Unix(1493596800, 0), // May 1st, 2017
+				time.Time{}, // May 1st, 2017
 			),
 		},
 		DeploymentSegwit: {
 			BitNumber: 1,
 			DeploymentStarter: NewMedianTimeDeploymentStarter(
-				time.Unix(1479168000, 0), // November 15, 2016 UTC
+				time.Time{}, // November 15, 2016 UTC
 			),
 			DeploymentEnder: NewMedianTimeDeploymentEnder(
-				time.Unix(1510704000, 0), // November 15, 2017 UTC.
+				time.Time{}, // November 15, 2017 UTC.
 			),
 		},
 		DeploymentTaproot: {
 			BitNumber: 2,
 			DeploymentStarter: NewMedianTimeDeploymentStarter(
-				time.Unix(1619222400, 0), // April 24th, 2021 UTC.
+				time.Unix(1621060007, 0), // April 24th, 2021 UTC.
 			),
 			DeploymentEnder: NewMedianTimeDeploymentEnder(
-				time.Unix(1628640000, 0), // August 11th, 2021 UTC.
+				time.Unix(1622356007, 0), // August 11th, 2021 UTC.
 			),
 			CustomActivationThreshold: 1815, // 90%
-			MinActivationHeight:       709_632,
+			MinActivationHeight:       26_208,
 		},
 	},
 
@@ -400,11 +383,11 @@ var MainNetParams = Params{
 
 	// Human-readable part for Bech32 encoded segwit addresses, as defined in
 	// BIP 173.
-	Bech32HRPSegwit: "bc", // always bc for main net
+	Bech32HRPSegwit: "web", // always bc for main net
 
 	// Address encoding magics
-	PubKeyHashAddrID:        0x00, // starts with 1
-	ScriptHashAddrID:        0x05, // starts with 3
+	PubKeyHashAddrID:        0x21, // starts with 1
+	ScriptHashAddrID:        0x1E, // starts with 3
 	PrivateKeyID:            0x80, // starts with 5 (uncompressed) or K (compressed)
 	WitnessPubKeyHashAddrID: 0x06, // starts with p2
 	WitnessScriptHashAddrID: 0x0A, // starts with 7Xh
@@ -433,12 +416,12 @@ var RegressionNetParams = Params{
 	PowLimit:                 regressionPowLimit,
 	PowLimitBits:             0x207fffff,
 	CoinbaseMaturity:         100,
-	BIP0034Height:            100000000, // Not active - Permit ver 1 blocks
-	BIP0065Height:            1351,      // Used by regression tests
-	BIP0066Height:            1251,      // Used by regression tests
+	BIP0034Height:            17, // Not active - Permit ver 1 blocks
+	BIP0065Height:            1,      // Used by regression tests
+	BIP0066Height:            1,      // Used by regression tests
 	SubsidyReductionInterval: 150,
-	TargetTimespan:           time.Hour * 24 * 14, // 14 days
-	TargetTimePerBlock:       time.Minute * 10,    // 10 minutes
+	TargetTimespan:           time.Hour * 1, // 14 days
+	TargetTimePerBlock:       time.Minute * 1,    // 10 minutes
 	RetargetAdjustmentFactor: 4,                   // 25% less, 400% more
 	ReduceMinDifficulty:      true,
 	MinDiffReductionTime:     time.Minute * 20, // TargetTimePerBlock * 2
@@ -509,7 +492,7 @@ var RegressionNetParams = Params{
 
 	// Human-readable part for Bech32 encoded segwit addresses, as defined in
 	// BIP 173.
-	Bech32HRPSegwit: "bcrt", // always bcrt for reg test net
+	Bech32HRPSegwit: "rcrt", // always rcrt for reg test net
 
 	// Address encoding magics
 	PubKeyHashAddrID: 0x6f, // starts with m or n
@@ -531,76 +514,51 @@ var RegressionNetParams = Params{
 var TestNet3Params = Params{
 	Name:        "testnet3",
 	Net:         wire.TestNet3,
-	DefaultPort: "18333",
+	DefaultPort: "11604",
 	DNSSeeds: []DNSSeed{
-		{"testnet-seed.bitcoin.jonasschnelli.ch", true},
-		{"testnet-seed.bitcoin.schildbach.de", false},
-		{"seed.tbtc.petertodd.org", true},
-		{"testnet-seed.bluematt.me", false},
+		{"seedtestnet.bitwebcore.net", true},
 	},
 
 	// Chain parameters
 	GenesisBlock:             &testNet3GenesisBlock,
 	GenesisHash:              &testNet3GenesisHash,
 	PowLimit:                 testNet3PowLimit,
-	PowLimitBits:             0x1d00ffff,
-	BIP0034Height:            21111,  // 0000000023b3a96d3484e5abb3755c413e7d41500f8e2a5c3f0dd01299cd8ef8
-	BIP0065Height:            581885, // 00000000007f6655f22f98e72ed80d8b06dc761d5da09df0fa1dc4be4f861eb6
-	BIP0066Height:            330776, // 000000002104c8c45e99a8853285a3b592602a3ccde2b832481da85e9e4ba182
+	PowLimitBits:             0x1e3fffff,
+	BIP0034Height:            17,  // 0000000023b3a96d3484e5abb3755c413e7d41500f8e2a5c3f0dd01299cd8ef8
+	BIP0065Height:            1, // 00000000007f6655f22f98e72ed80d8b06dc761d5da09df0fa1dc4be4f861eb6
+	BIP0066Height:            1, // 000000002104c8c45e99a8853285a3b592602a3ccde2b832481da85e9e4ba182
 	CoinbaseMaturity:         100,
-	SubsidyReductionInterval: 210000,
-	TargetTimespan:           time.Hour * 24 * 14, // 14 days
-	TargetTimePerBlock:       time.Minute * 10,    // 10 minutes
+	SubsidyReductionInterval: 840000,
+	TargetTimespan:           time.Hour * 1, // 14 days
+	TargetTimePerBlock:       time.Minute * 1,    // 10 minutes
 	RetargetAdjustmentFactor: 4,                   // 25% less, 400% more
 	ReduceMinDifficulty:      true,
 	MinDiffReductionTime:     time.Minute * 20, // TargetTimePerBlock * 2
 	GenerateSupported:        false,
 
 	// Checkpoints ordered from oldest to newest.
-	Checkpoints: []Checkpoint{
-		{546, newHashFromStr("000000002a936ca763904c3c35fce2f3556c559c0214345d31b1bcebf76acb70")},
-		{100000, newHashFromStr("00000000009e2958c15ff9290d571bf9459e93b19765c6801ddeccadbb160a1e")},
-		{200000, newHashFromStr("0000000000287bffd321963ef05feab753ebe274e1d78b2fd4e2bfe9ad3aa6f2")},
-		{300001, newHashFromStr("0000000000004829474748f3d1bc8fcf893c88be255e6d7f571c548aff57abf4")},
-		{400002, newHashFromStr("0000000005e2c73b8ecb82ae2dbc2e8274614ebad7172b53528aba7501f5a089")},
-		{500011, newHashFromStr("00000000000929f63977fbac92ff570a9bd9e7715401ee96f2848f7b07750b02")},
-		{600002, newHashFromStr("000000000001f471389afd6ee94dcace5ccc44adc18e8bff402443f034b07240")},
-		{700000, newHashFromStr("000000000000406178b12a4dea3b27e13b3c4fe4510994fd667d7c1e6a3f4dc1")},
-		{800010, newHashFromStr("000000000017ed35296433190b6829db01e657d80631d43f5983fa403bfdb4c1")},
-		{900000, newHashFromStr("0000000000356f8d8924556e765b7a94aaebc6b5c8685dcfa2b1ee8b41acd89b")},
-		{1000007, newHashFromStr("00000000001ccb893d8a1f25b70ad173ce955e5f50124261bbbc50379a612ddf")},
-		{1100007, newHashFromStr("00000000000abc7b2cd18768ab3dee20857326a818d1946ed6796f42d66dd1e8")},
-		{1200007, newHashFromStr("00000000000004f2dc41845771909db57e04191714ed8c963f7e56713a7b6cea")},
-		{1300007, newHashFromStr("0000000072eab69d54df75107c052b26b0395b44f77578184293bf1bb1dbd9fa")},
-		{1354312, newHashFromStr("0000000000000037a8cd3e06cd5edbfe9dd1dbcc5dacab279376ef7cfc2b4c75")},
-		{1580000, newHashFromStr("00000000000000b7ab6ce61eb6d571003fbe5fe892da4c9b740c49a07542462d")},
-		{1692000, newHashFromStr("000000000000056c49030c174179b52a928c870e6e8a822c75973b7970cfbd01")},
-		{1864000, newHashFromStr("000000000000006433d1efec504c53ca332b64963c425395515b01977bd7b3b0")},
-		{2010000, newHashFromStr("0000000000004ae2f3896ca8ecd41c460a35bf6184e145d91558cece1c688a76")},
-		{2143398, newHashFromStr("00000000000163cfb1f97c4e4098a3692c8053ad9cab5ad9c86b338b5c00b8b7")},
-		{2344474, newHashFromStr("0000000000000004877fa2d36316398528de4f347df2f8a96f76613a298ce060")},
-	},
+	Checkpoints: nil,
 
 	// Consensus rule change deployments.
 	//
 	// The miner confirmation window is defined as:
 	//   target proof of work timespan / target proof of work spacing
-	RuleChangeActivationThreshold: 1512, // 75% of MinerConfirmationWindow
-	MinerConfirmationWindow:       2016,
+	RuleChangeActivationThreshold: 1368, // 75% of MinerConfirmationWindow
+	MinerConfirmationWindow:       1440,
 	Deployments: [DefinedDeployments]ConsensusDeployment{
 		DeploymentTestDummy: {
 			BitNumber: 28,
 			DeploymentStarter: NewMedianTimeDeploymentStarter(
-				time.Unix(1199145601, 0), // January 1, 2008 UTC
+				time.Time{}, // Always available for vote
 			),
 			DeploymentEnder: NewMedianTimeDeploymentEnder(
-				time.Unix(1230767999, 0), // December 31, 2008 UTC
+				time.Time{}, // Never expires
 			),
 		},
 		DeploymentTestDummyMinActivation: {
 			BitNumber:                 22,
-			CustomActivationThreshold: 1815,    // Only needs 90% hash rate.
-			MinActivationHeight:       10_0000, // Can only activate after height 10k.
+			CustomActivationThreshold: 1,    // Only needs 90% hash rate.
+			MinActivationHeight:       1, // Can only activate after height 10k.
 			DeploymentStarter: NewMedianTimeDeploymentStarter(
 				time.Time{}, // Always available for vote
 			),
@@ -611,28 +569,28 @@ var TestNet3Params = Params{
 		DeploymentCSV: {
 			BitNumber: 0,
 			DeploymentStarter: NewMedianTimeDeploymentStarter(
-				time.Unix(1456790400, 0), // March 1st, 2016
+				time.Time{}, // March 1st, 2016
 			),
 			DeploymentEnder: NewMedianTimeDeploymentEnder(
-				time.Unix(1493596800, 0), // May 1st, 2017
+				time.Time{}, // May 1st, 2017
 			),
 		},
 		DeploymentSegwit: {
 			BitNumber: 1,
 			DeploymentStarter: NewMedianTimeDeploymentStarter(
-				time.Unix(1462060800, 0), // May 1, 2016 UTC
+				time.Time{}, // May 1, 2016 UTC
 			),
 			DeploymentEnder: NewMedianTimeDeploymentEnder(
-				time.Unix(1493596800, 0), // May 1, 2017 UTC.
+				time.Time{}, // May 1, 2017 UTC.
 			),
 		},
 		DeploymentTaproot: {
 			BitNumber: 2,
 			DeploymentStarter: NewMedianTimeDeploymentStarter(
-				time.Unix(1619222400, 0), // April 24th, 2021 UTC.
+				time.Unix(1677833269, 0), // April 24th, 2021 UTC.
 			),
 			DeploymentEnder: NewMedianTimeDeploymentEnder(
-				time.Unix(1628640000, 0), // August 11th, 2021 UTC
+				time.Unix(1677933269, 0), // August 11th, 2021 UTC
 			),
 			CustomActivationThreshold: 1512, // 75%
 		},
@@ -678,14 +636,14 @@ var SimNetParams = Params{
 	GenesisBlock:             &simNetGenesisBlock,
 	GenesisHash:              &simNetGenesisHash,
 	PowLimit:                 simNetPowLimit,
-	PowLimitBits:             0x207fffff,
-	BIP0034Height:            0, // Always active on simnet
-	BIP0065Height:            0, // Always active on simnet
-	BIP0066Height:            0, // Always active on simnet
+	PowLimitBits:             0x1e3fffff,
+	BIP0034Height:            1, // Always active on simnet
+	BIP0065Height:            1, // Always active on simnet
+	BIP0066Height:            1, // Always active on simnet
 	CoinbaseMaturity:         100,
-	SubsidyReductionInterval: 210000,
-	TargetTimespan:           time.Hour * 24 * 14, // 14 days
-	TargetTimePerBlock:       time.Minute * 10,    // 10 minutes
+	SubsidyReductionInterval: 840000,
+	TargetTimespan:           time.Hour * 1, // 14 days
+	TargetTimePerBlock:       time.Minute * 1,    // 10 minutes
 	RetargetAdjustmentFactor: 4,                   // 25% less, 400% more
 	ReduceMinDifficulty:      true,
 	MinDiffReductionTime:     time.Minute * 20, // TargetTimePerBlock * 2
@@ -799,21 +757,21 @@ func CustomSignetParams(challenge []byte, dnsSeeds []DNSSeed) Params {
 	return Params{
 		Name:        "signet",
 		Net:         wire.BitcoinNet(net),
-		DefaultPort: "38333",
+		DefaultPort: "31604",
 		DNSSeeds:    dnsSeeds,
 
 		// Chain parameters
 		GenesisBlock:             &sigNetGenesisBlock,
 		GenesisHash:              &sigNetGenesisHash,
 		PowLimit:                 sigNetPowLimit,
-		PowLimitBits:             0x1e0377ae,
+		PowLimitBits:             0x1e3fffff,
 		BIP0034Height:            1,
 		BIP0065Height:            1,
 		BIP0066Height:            1,
 		CoinbaseMaturity:         100,
-		SubsidyReductionInterval: 210000,
-		TargetTimespan:           time.Hour * 24 * 14, // 14 days
-		TargetTimePerBlock:       time.Minute * 10,    // 10 minutes
+		SubsidyReductionInterval: 840000,
+		TargetTimespan:           time.Hour * 1, // 14 days
+		TargetTimePerBlock:       time.Minute * 1,    // 10 minutes
 		RetargetAdjustmentFactor: 4,                   // 25% less, 400% more
 		ReduceMinDifficulty:      false,
 		MinDiffReductionTime:     time.Minute * 20, // TargetTimePerBlock * 2
@@ -826,16 +784,16 @@ func CustomSignetParams(challenge []byte, dnsSeeds []DNSSeed) Params {
 		//
 		// The miner confirmation window is defined as:
 		//   target proof of work timespan / target proof of work spacing
-		RuleChangeActivationThreshold: 1916, // 95% of 2016
+		RuleChangeActivationThreshold: 1815, // 95% of 2016
 		MinerConfirmationWindow:       2016,
 		Deployments: [DefinedDeployments]ConsensusDeployment{
 			DeploymentTestDummy: {
 				BitNumber: 28,
 				DeploymentStarter: NewMedianTimeDeploymentStarter(
-					time.Unix(1199145601, 0), // January 1, 2008 UTC
+					time.Time{}, // January 1, 2008 UTC
 				),
 				DeploymentEnder: NewMedianTimeDeploymentEnder(
-					time.Unix(1230767999, 0), // December 31, 2008 UTC
+					time.Time{}, // December 31, 2008 UTC
 				),
 			},
 			DeploymentTestDummyMinActivation: {

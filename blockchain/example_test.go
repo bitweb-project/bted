@@ -10,11 +10,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/database"
-	_ "github.com/btcsuite/btcd/database/ffldb"
-	"github.com/btcsuite/btcd/btcutil"
+	"github.com/bitweb-project/bted/blockchain"
+	"github.com/bitweb-project/bted/chaincfg"
+	"github.com/bitweb-project/bted/database"
+	_ "github.com/bitweb-project/bted/database/ffldb"
+	"github.com/bitweb-project/bted/bteutil"
 )
 
 // This example demonstrates how to create a new chain instance and use
@@ -58,7 +58,7 @@ func ExampleBlockChain_ProcessBlock() {
 	// Process a block.  For this example, we are going to intentionally
 	// cause an error by trying to process the genesis block which already
 	// exists.
-	genesisBlock := btcutil.NewBlock(chaincfg.MainNetParams.GenesisBlock)
+	genesisBlock := bteutil.NewBlock(chaincfg.MainNetParams.GenesisBlock)
 	isMainChain, isOrphan, err := chain.ProcessBlock(genesisBlock,
 		blockchain.BFNone)
 	if err != nil {

@@ -1,4 +1,4 @@
-PKG := github.com/btcsuite/btcd
+PKG := github.com/bitweb-project/bted
 
 LINT_PKG := github.com/golangci/golangci-lint/cmd/golangci-lint
 GOACC_PKG := github.com/ory/go-acc
@@ -66,7 +66,7 @@ goimports:
 build:
 	@$(call print, "Building all binaries")
 	$(GOBUILD) $(PKG)
-	$(GOBUILD) $(PKG)/cmd/btcctl
+	$(GOBUILD) $(PKG)/cmd/btectl
 	$(GOBUILD) $(PKG)/cmd/gencerts
 	$(GOBUILD) $(PKG)/cmd/findcheckpoint
 	$(GOBUILD) $(PKG)/cmd/addblock
@@ -81,8 +81,8 @@ unit:
 	@$(call print, "Running unit tests.")
 	$(GOTEST_DEV) ./... -test.timeout=20m
 	cd btcec; $(GOTEST_DEV) ./... -test.timeout=20m
-	cd btcutil; $(GOTEST_DEV) ./... -test.timeout=20m
-	cd btcutil/psbt; $(GOTEST_DEV) ./... -test.timeout=20m
+	cd bteutil; $(GOTEST_DEV) ./... -test.timeout=20m
+	cd bteutil/psbt; $(GOTEST_DEV) ./... -test.timeout=20m
 
 unit-cover: $(GOACC_BIN)
 	@$(call print, "Running unit coverage tests.")
@@ -92,16 +92,16 @@ unit-cover: $(GOACC_BIN)
 	# nicely with the CI tool we use to render live code coverage.
 	cd btcec; $(GOACC_BIN) ./...; sed -i.bak 's/v2\///g' coverage.txt
 
-	cd btcutil; $(GOACC_BIN) ./...
+	cd bteutil; $(GOACC_BIN) ./...
 
-	cd btcutil/psbt; $(GOACC_BIN) ./...
+	cd bteutil/psbt; $(GOACC_BIN) ./...
 
 unit-race:
 	@$(call print, "Running unit race tests.")
 	env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
 	cd btcec; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
-	cd btcutil; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
-	cd btcutil/psbt; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
+	cd bteutil; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
+	cd bteutil/psbt; env CGO_ENABLED=1 GORACE="history_size=7 halt_on_errors=1" $(GOTEST) -race -test.timeout=20m ./...
 
 # =========
 # UTILITIES
@@ -119,7 +119,7 @@ lint: $(LINT_BIN)
 
 clean:
 	@$(call print, "Cleaning source.$(NC)")
-	$(RM) coverage.txt btcec/coverage.txt btcutil/coverage.txt btcutil/psbt/coverage.txt
+	$(RM) coverage.txt btcec/coverage.txt bteutil/coverage.txt bteutil/psbt/coverage.txt
 
 .PHONY: all \
 	default \

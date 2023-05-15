@@ -50,9 +50,9 @@ func (n NotificationType) String() string {
 // Notification defines notification that is sent to the caller via the callback
 // function provided during the call to New and consists of a notification type
 // as well as associated data that depends on the type as follows:
-// 	- NTBlockAccepted:     *btcutil.Block
-// 	- NTBlockConnected:    *btcutil.Block
-// 	- NTBlockDisconnected: *btcutil.Block
+// 	- NTBlockAccepted:     *bteutil.Block
+// 	- NTBlockConnected:    *bteutil.Block
+// 	- NTBlockDisconnected: *bteutil.Block
 type Notification struct {
 	Type NotificationType
 	Data interface{}

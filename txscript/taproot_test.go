@@ -12,11 +12,11 @@ import (
 	"testing"
 	"testing/quick"
 
-	"github.com/btcsuite/btcd/btcec/v2"
-	"github.com/btcsuite/btcd/btcec/v2/schnorr"
-	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/btcutil/hdkeychain"
-	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/bitweb-project/bted/btcec/v2"
+	"github.com/bitweb-project/bted/btcec/v2/schnorr"
+	"github.com/bitweb-project/bted/bteutil"
+	"github.com/bitweb-project/bted/bteutil/hdkeychain"
+	"github.com/bitweb-project/bted/chaincfg"
 	secp "github.com/decred/dcrd/dcrec/secp256k1/v4"
 	"github.com/stretchr/testify/require"
 )
@@ -255,7 +255,7 @@ func TestTaprootConstructKeyPath(t *testing.T) {
 
 			tapKey := ComputeTaprootKeyNoScript(pubKey)
 
-			addr, err := btcutil.NewAddressTaproot(
+			addr, err := bteutil.NewAddressTaproot(
 				schnorr.SerializePubKey(tapKey),
 				&chaincfg.MainNetParams,
 			)

@@ -9,10 +9,10 @@ import (
 	"encoding/hex"
 	"encoding/json"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
 
-	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitweb-project/bted/bteutil"
+	"github.com/bitweb-project/bted/wire"
 )
 
 // GetBlockHeaderVerboseResult models the data from the getblockheader command when
@@ -452,7 +452,7 @@ type GetTxOutSetInfoResult struct {
 	BogoSize       int64          `json:"bogosize"`
 	HashSerialized chainhash.Hash `json:"hash_serialized_2"`
 	DiskSize       int64          `json:"disk_size"`
-	TotalAmount    btcutil.Amount `json:"total_amount"`
+	TotalAmount    bteutil.Amount `json:"total_amount"`
 }
 
 // UnmarshalJSON unmarshals the result of the gettxoutsetinfo JSON-RPC call
@@ -491,7 +491,7 @@ func (g *GetTxOutSetInfoResult) UnmarshalJSON(data []byte) error {
 
 	g.HashSerialized = *serializedHash
 
-	amount, err := btcutil.NewAmount(aux.TotalAmount)
+	amount, err := bteutil.NewAmount(aux.TotalAmount)
 	if err != nil {
 		return err
 	}
@@ -757,7 +757,7 @@ type TxRawDecodeResult struct {
 // validateaddress command.
 //
 // Compared to the Bitcoin Core version, this struct lacks the scriptPubKey
-// field since it requires wallet access, which is outside the scope of btcd.
+// field since it requires wallet access, which is outside the scope of bted.
 // Ref: https://bitcoincore.org/en/doc/0.20.0/rpc/util/validateaddress/
 type ValidateAddressChainResult struct {
 	IsValid        bool    `json:"isvalid"`
@@ -787,7 +787,7 @@ type rawFundRawTransactionResult struct {
 // FundRawTransactionResult is the result of the fundrawtransaction JSON-RPC call
 type FundRawTransactionResult struct {
 	Transaction    *wire.MsgTx
-	Fee            btcutil.Amount
+	Fee            bteutil.Amount
 	ChangePosition int // the position of the added change output, or -1
 }
 
@@ -812,7 +812,7 @@ func (f *FundRawTransactionResult) UnmarshalJSON(data []byte) error {
 		}
 	}
 
-	fee, err := btcutil.NewAmount(rawRes.Fee)
+	fee, err := bteutil.NewAmount(rawRes.Fee)
 	if err != nil {
 		return err
 	}

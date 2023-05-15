@@ -21,4 +21,4 @@ COPY --from=build /go/bin /bin
 # 8333  Mainnet Bitcoin peer-to-peer port
 # 8334  Mainet RPC port
 EXPOSE 8333 8334
-ENTRYPOINT ["btcd"]
+ENTRYPOINT ["bted"]

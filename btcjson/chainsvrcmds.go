@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitweb-project/bted/wire"
 )
 
 // AddNodeSubCmd defines the type used in the addnode JSON-RPC command for the
@@ -58,14 +58,14 @@ type TransactionInput struct {
 // CreateRawTransactionCmd defines the createrawtransaction JSON-RPC command.
 type CreateRawTransactionCmd struct {
 	Inputs   []TransactionInput
-	Amounts  map[string]float64 `jsonrpcusage:"{\"address\":amount,...}"` // In BTC
+	Amounts  map[string]float64 `jsonrpcusage:"{\"address\":amount,...}"` // In BTE
 	LockTime *int64
 }
 
 // NewCreateRawTransactionCmd returns a new instance which can be used to issue
 // a createrawtransaction JSON-RPC command.
 //
-// Amounts are in BTC. Passing in nil and the empty slice as inputs is equivalent,
+// Amounts are in BTE. Passing in nil and the empty slice as inputs is equivalent,
 // both gets interpreted as the empty slice.
 func NewCreateRawTransactionCmd(inputs []TransactionInput, amounts map[string]float64,
 	lockTime *int64) *CreateRawTransactionCmd {
@@ -142,7 +142,7 @@ type FundRawTransactionOpts struct {
 	ChangeType             *ChangeType           `json:"change_type,omitempty"`
 	IncludeWatching        *bool                 `json:"includeWatching,omitempty"`
 	LockUnspents           *bool                 `json:"lockUnspents,omitempty"`
-	FeeRate                *float64              `json:"feeRate,omitempty"` // BTC/kB
+	FeeRate                *float64              `json:"feeRate,omitempty"` // BTE/kB
 	SubtractFeeFromOutputs []int                 `json:"subtractFeeFromOutputs,omitempty"`
 	Replaceable            *bool                 `json:"replaceable,omitempty"`
 	ConfTarget             *int                  `json:"conf_target,omitempty"`

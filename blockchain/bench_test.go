@@ -7,14 +7,13 @@ package blockchain
 import (
 	"testing"
 
-	"github.com/btcsuite/btcd/btcutil"
-	"github.com/btcsuite/btcd/wire"
+	"github.com/bitweb-project/bted/bteutil"
 )
 
 // BenchmarkIsCoinBase performs a simple benchmark against the IsCoinBase
 // function.
 func BenchmarkIsCoinBase(b *testing.B) {
-	tx, _ := btcutil.NewBlock(&Block100000).Tx(1)
+	tx, _ := bteutil.NewBlock(&Block100000).Tx(1)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		IsCoinBase(tx)
@@ -28,35 +27,5 @@ func BenchmarkIsCoinBaseTx(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		IsCoinBaseTx(tx)
-	}
-}
-
-func BenchmarkUtxoFetchMap(b *testing.B) {
-	block := Block100000
-	transactions := block.Transactions
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		needed := make(map[wire.OutPoint]struct{}, len(transactions))
-		for _, tx := range transactions[1:] {
-			for _, txIn := range tx.TxIn {
-				needed[txIn.PreviousOutPoint] = struct{}{}
-			}
-		}
-	}
-}
-
-func BenchmarkUtxoFetchSlices(b *testing.B) {
-	block := Block100000
-	transactions := block.Transactions
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		needed := make([]wire.OutPoint, 0, len(transactions))
-		for _, tx := range transactions[1:] {
-			for _, txIn := range tx.TxIn {
-				needed = append(needed, txIn.PreviousOutPoint)
-			}
-		}
 	}
 }

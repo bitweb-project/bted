@@ -10,17 +10,17 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/btcsuite/btcd/addrmgr"
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/blockchain/indexers"
-	"github.com/btcsuite/btcd/connmgr"
-	"github.com/btcsuite/btcd/database"
-	"github.com/btcsuite/btcd/mempool"
-	"github.com/btcsuite/btcd/mining"
-	"github.com/btcsuite/btcd/mining/cpuminer"
-	"github.com/btcsuite/btcd/netsync"
-	"github.com/btcsuite/btcd/peer"
-	"github.com/btcsuite/btcd/txscript"
+	"github.com/bitweb-project/bted/addrmgr"
+	"github.com/bitweb-project/bted/blockchain"
+	"github.com/bitweb-project/bted/blockchain/indexers"
+	"github.com/bitweb-project/bted/connmgr"
+	"github.com/bitweb-project/bted/database"
+	"github.com/bitweb-project/bted/mempool"
+	"github.com/bitweb-project/bted/mining"
+	"github.com/bitweb-project/bted/mining/cpuminer"
+	"github.com/bitweb-project/bted/netsync"
+	"github.com/bitweb-project/bted/peer"
+	"github.com/bitweb-project/bted/txscript"
 
 	"github.com/btcsuite/btclog"
 	"github.com/jrick/logrotate/rotator"
@@ -58,7 +58,7 @@ var (
 	amgrLog = backendLog.Logger("AMGR")
 	cmgrLog = backendLog.Logger("CMGR")
 	bcdbLog = backendLog.Logger("BCDB")
-	btcdLog = backendLog.Logger("BTCD")
+	btedLog = backendLog.Logger("BTED")
 	chanLog = backendLog.Logger("CHAN")
 	discLog = backendLog.Logger("DISC")
 	indxLog = backendLog.Logger("INDX")
@@ -92,7 +92,7 @@ var subsystemLoggers = map[string]btclog.Logger{
 	"AMGR": amgrLog,
 	"CMGR": cmgrLog,
 	"BCDB": bcdbLog,
-	"BTCD": btcdLog,
+	"BTED": btedLog,
 	"CHAN": chanLog,
 	"DISC": discLog,
 	"INDX": indxLog,

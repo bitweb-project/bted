@@ -20,7 +20,7 @@ systems/integration tests.
 ## Installation and Updating
 
 ```bash
-$ go get -u github.com/btcsuite/btcd/integration/rpctest
+$ go get -u github.com/bitweb-project/bted/integration/rpctest
 ```
 
 ## License

@@ -16,11 +16,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/integration/rpctest"
-	"github.com/btcsuite/btcd/rpcclient"
+	"github.com/bitweb-project/bted/blockchain"
+	"github.com/bitweb-project/bted/chaincfg"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/integration/rpctest"
+	"github.com/bitweb-project/bted/rpcclient"
 )
 
 func testGetBestBlock(r *rpctest.Harness, t *testing.T) {
@@ -349,7 +349,7 @@ func TestRpcServer(t *testing.T) {
 	defer func() {
 		// If one of the integration tests caused a panic within the main
 		// goroutine, then tear down all the harnesses in order to avoid
-		// any leaked btcd processes.
+		// any leaked bted processes.
 		if r := recover(); r != nil {
 			fmt.Println("recovering from test panic: ", r)
 			if err := rpctest.TearDownAll(); err != nil {

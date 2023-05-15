@@ -8,9 +8,9 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/btcsuite/btcd/btcec/v2"
-	"github.com/btcsuite/btcd/btcec/v2/ecdsa"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/btcec/v2"
+	"github.com/bitweb-project/bted/btcec/v2/ecdsa"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
 )
 
 // This example demonstrates signing a message with a secp256k1 private key that

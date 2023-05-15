@@ -5,13 +5,13 @@
 package netsync
 
 import (
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/mempool"
-	"github.com/btcsuite/btcd/peer"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcd/btcutil"
+	"github.com/bitweb-project/bted/blockchain"
+	"github.com/bitweb-project/bted/chaincfg"
+	"github.com/bitweb-project/bted/chaincfg/chainhash"
+	"github.com/bitweb-project/bted/mempool"
+	"github.com/bitweb-project/bted/peer"
+	"github.com/bitweb-project/bted/wire"
+	"github.com/bitweb-project/bted/bteutil"
 )
 
 // PeerNotifier exposes methods to notify peers of status changes to
@@ -24,7 +24,7 @@ type PeerNotifier interface {
 
 	RelayInventory(invVect *wire.InvVect, data interface{})
 
-	TransactionConfirmed(tx *btcutil.Tx)
+	TransactionConfirmed(tx *bteutil.Tx)
 }
 
 // Config is a configuration struct used to initialize a new SyncManager.

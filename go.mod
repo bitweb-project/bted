@@ -34,6 +34,7 @@ replace github.com/bitweb-project/bted/bteutil => ./bteutil
 // The retract statements below fixes an accidental push of the tags of a bted
 // fork.
 retract (
+	v0.23.5
 	v0.23.4
 	v0.23.3
 	v0.18.1

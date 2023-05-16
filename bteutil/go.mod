@@ -15,3 +15,7 @@ require (
 )
 
 replace github.com/bitweb-project/bted => ../
+
+retract (
+	v1.1.0
+)

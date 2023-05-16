@@ -11,5 +11,7 @@ require (
 require github.com/decred/dcrd/crypto/blake256 v1.0.0 // indirect
 
 retract (
+    v2.1.5 // invalid version
+    v2.1.4 // invalid version
     v2.1.3 // invalid version
 )
